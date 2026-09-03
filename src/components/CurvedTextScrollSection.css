@@ -1,0 +1,78 @@
+/* ==========================================================================
+   Curved Text On Path Scroll Animation Styles (Scroll Animation #27)
+   ========================================================================== */
+
+.curved-text-section {
+  position: relative;
+  width: 100%;
+  padding: 68px 0 74px 0;
+  overflow: hidden;
+  background-color: #FAF5EE;
+  pointer-events: none;
+  user-select: none;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.curved-text-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.curved-text-track-wrap {
+  position: relative;
+  width: 120vw;
+  margin-left: -10vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.curved-svg-canvas {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  display: block;
+}
+
+.curved-svg-text {
+  font-family: 'Plus Jakarta Sans', var(--font-family);
+  font-size: 44px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  dominant-baseline: central;
+}
+
+.curved-svg-text.text-accent-primary {
+  fill: #4E2B12;
+  opacity: 0.88;
+}
+
+@media (max-width: 900px) {
+  .curved-text-section {
+    padding: 30px 0 35px 0;
+  }
+
+  .curved-svg-text {
+    font-size: 58px;
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (max-width: 600px) {
+  .curved-text-section {
+    padding: 24px 0 28px 0;
+  }
+
+  .curved-svg-text {
+    font-size: 72px;
+    letter-spacing: 0.03em;
+  }
+}

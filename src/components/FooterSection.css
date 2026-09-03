@@ -1,0 +1,433 @@
+/* ==========================================================================
+   Aurora Café - Final Footer Section Styles (Reference-Aligned)
+   ========================================================================== */
+
+.footer-section {
+  position: relative;
+  width: 100%;
+  background: radial-gradient(ellipse at 50% 20%, #3D1E0C 0%, #271307 70%, #1A0C04 100%);
+  color: #FAF5EE;
+  overflow: hidden;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1. Upper Hero Headline Banner */
+.footer-banner-wrap {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 100px 32px 80px 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-hero-headline {
+  max-width: 980px;
+  width: 100%;
+}
+
+.footer-headline-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(2.8rem, 5.8vw, 5.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #F7EAD9;
+  margin: 0;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* 2. Lower Sheet Card Container */
+.footer-sheet-container {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.footer-sheet-card {
+  width: 100%;
+  background-color: #FAF5EE;
+  color: #3E1E09;
+  border-radius: 36px 36px 0 0;
+  padding: 64px 64px 28px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  position: relative;
+  box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.25);
+}
+
+/* Top Row: Brand Info + Nav Columns */
+.footer-sheet-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: clamp(36px, 5vw, 72px);
+  width: 100%;
+}
+
+/* Left Brand Column */
+.footer-brand-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  max-width: 420px;
+}
+
+.footer-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-brand-icon {
+  color: #B57738;
+}
+
+.footer-brand-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #3E1E09;
+  letter-spacing: -0.02em;
+}
+
+.footer-brand-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: rgba(62, 30, 9, 0.75);
+  margin: 0;
+}
+
+.footer-brand-action {
+  margin-top: 6px;
+}
+
+.footer-menu-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  background-color: #542D17;
+  color: #FFFFFF;
+  font-family: 'Plus Jakarta Sans', var(--font-family);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 360ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.footer-menu-link:hover {
+  background-color: #3E1E09;
+}
+
+.footer-menu-link .btn-text-roll {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 1.25em;
+  line-height: 1.25em;
+  vertical-align: middle;
+}
+
+.footer-menu-link .btn-text-primary,
+.footer-menu-link .btn-text-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.footer-menu-link .btn-text-secondary {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+}
+
+.footer-menu-link:hover .btn-text-primary {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.footer-menu-link:hover .btn-text-secondary {
+  transform: translateY(-100%);
+  opacity: 1;
+}
+
+/* Right Nav Grid (Aligned to the Right) */
+.footer-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: clamp(32px, 4vw, 56px);
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.footer-nav-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer-nav-heading {
+  font-family: 'Plus Jakarta Sans', var(--font-family);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3E1E09;
+  margin: 0;
+}
+
+.footer-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-nav-list a {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(62, 30, 9, 0.72);
+  text-decoration: none;
+  transition: color 0.22s ease, transform 0.22s ease;
+  display: inline-block;
+}
+
+.footer-nav-list a:hover {
+  color: #542D17;
+  transform: translateX(2px);
+}
+
+.footer-static-info {
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(62, 30, 9, 0.65);
+}
+
+/* Giant Wordmark Section (SVG Vector - Aligned Right) */
+.footer-wordmark-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  overflow: visible;
+  padding-top: 6px;
+  margin: 0;
+  user-select: none;
+}
+
+.footer-wordmark-svg {
+  width: 100%;
+  max-width: 940px;
+  height: auto;
+  display: block;
+  overflow: visible;
+  margin: 0 0 0 auto;
+}
+
+/* Bottom Bar */
+.footer-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid rgba(84, 45, 23, 0.12);
+  gap: 18px;
+}
+
+.footer-copyright {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(62, 30, 9, 0.60);
+}
+
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(62, 30, 9, 0.65);
+}
+
+.footer-legal-links a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-legal-links a:hover {
+  color: #3E1E09;
+}
+
+.footer-dot-sep {
+  color: rgba(62, 30, 9, 0.35);
+}
+
+.footer-back-to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  color: #542D17;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-back-to-top:hover {
+  color: #3E1E09;
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   Responsive Breakpoints
+   ========================================= */
+@media (max-width: 1024px) {
+  .footer-sheet-card {
+    padding: 48px 32px 28px 32px;
+    border-radius: 28px 28px 0 0;
+  }
+
+  .footer-sheet-top {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 36px !important;
+  }
+
+  .footer-brand-col {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .footer-nav-grid {
+    width: 100% !important;
+    margin-left: 0 !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 28px !important;
+    justify-content: flex-start !important;
+  }
+
+  .footer-wordmark-wrap {
+    justify-content: flex-end !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-banner-wrap {
+    padding: 50px 18px 32px 18px;
+  }
+
+  .footer-headline-text {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+  }
+
+  .footer-sheet-container {
+    padding: 0 10px;
+  }
+
+  .footer-sheet-card {
+    padding: 24px 16px 14px 16px;
+    border-radius: 24px 24px 0 0;
+    gap: 16px;
+  }
+
+  .footer-sheet-top {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 22px !important;
+  }
+
+  .footer-brand-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 12px;
+  }
+
+  .footer-brand-title {
+    font-size: 1.45rem;
+  }
+
+  .footer-brand-desc {
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  .footer-nav-grid {
+    width: 100% !important;
+    margin-left: 0 !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px 14px !important;
+  }
+
+  .footer-nav-heading {
+    font-size: 12px;
+  }
+
+  .footer-nav-list a {
+    font-size: 13px;
+  }
+
+  .footer-static-info {
+    font-size: 12.5px;
+  }
+
+  .footer-wordmark-wrap {
+    justify-content: flex-end !important;
+    padding-top: 0;
+    margin-bottom: -12px;
+  }
+
+  .footer-bottom-bar {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 4px;
+    gap: 6px;
+  }
+
+  .footer-copyright {
+    font-size: 11.5px;
+  }
+
+  .footer-legal-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 11.5px;
+  }
+}

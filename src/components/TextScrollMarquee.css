@@ -1,0 +1,70 @@
+/* ==========================================================================
+   Text Scroll Marquee - Exact Scroll Engine Matching CurvedTextScrollSection
+   ========================================================================== */
+
+.marquee-scroll-section {
+  position: relative;
+  width: 100%;
+  padding: 20px 0;
+  overflow: hidden;
+  background-color: #FAF5EE;
+  pointer-events: none;
+  user-select: none;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.marquee-scroll-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.marquee-scroll-track-wrap {
+  position: relative;
+  width: 120vw;
+  margin-left: -10vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.marquee-scroll-svg-canvas {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  display: block;
+}
+
+.marquee-scroll-svg-text {
+  font-family: 'Plus Jakarta Sans', var(--font-family);
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  dominant-baseline: central;
+}
+
+.marquee-scroll-svg-text.text-accent-coffee {
+  fill: #4E2B12;
+  opacity: 0.92;
+}
+
+@media (max-width: 900px) {
+  .marquee-scroll-svg-text {
+    font-size: 30px;
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (max-width: 640px) {
+  .marquee-scroll-svg-text {
+    font-size: 24px;
+    letter-spacing: 0.04em;
+  }
+}
