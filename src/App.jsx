@@ -254,8 +254,8 @@ export default function App() {
             style={{
               position: 'relative',
               width: '100%',
-              maxWidth: '620px',
-              height: '620px',
+              maxWidth: '520px',
+              height: '520px',
               transform: `translate3d(${cupX}, ${cupY}, 0) scale(${cupScale})`,
               pointerEvents: 'none',
               willChange: 'transform',

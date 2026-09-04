@@ -361,7 +361,7 @@ export default function Cup3DViewer({ currentSkinIndex, currentSkin, scrollProgr
     const ambientGlowTexture = createAmbientGlowTexture()
     const studioCastTexture = createSubtleStudioCastTexture()
 
-    const contactOcclusionGeo = new THREE.PlaneGeometry(0.72, 0.72)
+    const contactOcclusionGeo = new THREE.PlaneGeometry(0.60, 0.60)
     const contactOcclusionMat = new THREE.MeshBasicMaterial({
       map: contactOcclusionTexture,
       transparent: true,
@@ -370,11 +370,11 @@ export default function Cup3DViewer({ currentSkinIndex, currentSkin, scrollProgr
     })
     const contactOcclusionMesh = new THREE.Mesh(contactOcclusionGeo, contactOcclusionMat)
     contactOcclusionMesh.rotation.x = -Math.PI / 2
-    contactOcclusionMesh.position.set(0, -0.670, 0)
+    contactOcclusionMesh.position.set(0, -0.535, 0)
     contactOcclusionMesh.renderOrder = 1
     scene.add(contactOcclusionMesh)
 
-    const ambientGlowGeo = new THREE.PlaneGeometry(1.10, 1.10)
+    const ambientGlowGeo = new THREE.PlaneGeometry(0.92, 0.92)
     const ambientGlowMat = new THREE.MeshBasicMaterial({
       map: ambientGlowTexture,
       transparent: true,
@@ -383,11 +383,11 @@ export default function Cup3DViewer({ currentSkinIndex, currentSkin, scrollProgr
     })
     const ambientGlowMesh = new THREE.Mesh(ambientGlowGeo, ambientGlowMat)
     ambientGlowMesh.rotation.x = -Math.PI / 2
-    ambientGlowMesh.position.set(0, -0.671, 0)
+    ambientGlowMesh.position.set(0, -0.536, 0)
     ambientGlowMesh.renderOrder = 1
     scene.add(ambientGlowMesh)
 
-    const studioCastGeo = new THREE.PlaneGeometry(1.65, 0.85)
+    const studioCastGeo = new THREE.PlaneGeometry(1.40, 0.72)
     const studioCastMat = new THREE.MeshBasicMaterial({
       map: studioCastTexture,
       transparent: true,
@@ -396,15 +396,15 @@ export default function Cup3DViewer({ currentSkinIndex, currentSkin, scrollProgr
     })
     const studioCastMesh = new THREE.Mesh(studioCastGeo, studioCastMat)
     studioCastMesh.rotation.x = -Math.PI / 2
-    studioCastMesh.position.set(0.18, -0.672, 0.04)
+    studioCastMesh.position.set(0.15, -0.537, 0.03)
     studioCastMesh.renderOrder = 1
     scene.add(studioCastMesh)
 
-    // 7. High-End 3D Tapered Cup Group (Elevated for comfortable clearance above arrows)
+    // 7. High-End 3D Tapered Cup Group (Comfortable clearance above arrows and below navbar)
     const modelGroup = new THREE.Group()
     modelGroupRef.current = modelGroup
-    modelGroup.position.set(0, 0.06, 0)
-    modelGroup.scale.set(1.45, 1.45, 1.45)
+    modelGroup.position.set(0, 0.08, 0)
+    modelGroup.scale.set(1.22, 1.22, 1.22)
     scene.add(modelGroup)
 
     const currentSkinMat = SKIN_MATERIALS[currentSkinIndexRef.current] || SKIN_MATERIALS[0]
