@@ -16,9 +16,16 @@
 }
 
 .hero7-preloader {
-  z-index: 99999;
+  z-index: 100000;
   overflow: hidden;
   pointer-events: auto; /* Bloqueia interação enquanto a intro roda */
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.hero7-preloader * {
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 
 /* 1. Cortina 100% Sólida: Garante IMPERMEABILIDADE TOTAL visual do Hero antes da hora */
@@ -29,18 +36,17 @@
   will-change: opacity;
 }
 
-/* 2. Máscara de abertura recortada em formato de cápsula SVG */
+/* 2. Máscara de abertura idêntica em proporção e raio exato à cápsula (.hero7-progress) */
 .hero7-mask {
-  background-color: #1A110B;
-  /* O recorte tem o tamanho exato da cápsula para a transição ser 100% precisa */
-  -webkit-mask:
-    linear-gradient(#fff, #fff),
-    url("/hero7/preloader-bg.svg") center / min(72vw, 920px) min(24vw, 240px) no-repeat;
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#fff, #fff),
-    url("/hero7/preloader-bg.svg") center / min(72vw, 920px) min(24vw, 240px) no-repeat;
-  mask-composite: exclude;
+  top: 50%;
+  left: 50%;
+  width: min(72vw, 920px);
+  height: min(24vw, 240px);
+  min-height: 170px;
+  border-radius: 999px;
+  background: transparent;
+  outline: 200vmax solid #1A110B;
+  transform: translate(-50%, -50%) scale(1);
   will-change: transform, opacity;
   z-index: 2;
   pointer-events: none;
@@ -54,11 +60,11 @@
   width: min(72vw, 920px);
   height: min(24vw, 240px);
   min-height: 170px;
-  transform: translate(-50%, -50%) scale(0.86);
+  transform: translate(-50%, -50%) scale(0.92);
   border-radius: 999px;
   background-color: #2A1B12; /* Deep espresso roast */
   border: none;
-  box-shadow: none;
+  box-shadow: none !important;
   overflow: hidden;
   z-index: 3;
   pointer-events: none;
@@ -106,14 +112,35 @@
   inset: 0;
   border-radius: 999px;
   background-color: #F2E4CC;
-  clip-path: inset(0 100% 0 0 round 999px);
-  will-change: clip-path;
+  opacity: 0;
+  will-change: transform;
   z-index: 2;
   overflow: hidden;
+  box-shadow: none !important;
+}
+
+.hero7-text-beige {
+  will-change: transform;
+  overflow: hidden;
+}
+
+/* Espelha exatamente a iluminação central, granulação e fumaça da Hero atrás da barra */
+.hero7-hero-texture-sync {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100svh;
+  transform: translate(-50%, -50%);
+  background-color: #F2E4CC;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* No fundo bege revelado: NOSTA é marrom idêntico ao Hero (#432817) */
 .hero7-text-beige h1 {
+  position: relative;
+  z-index: 2;
   color: #432817; /* Marrom idêntico à Hero */
 }
 
@@ -185,10 +212,9 @@
   }
 
   .hero7-mask {
-    -webkit-mask-size: auto, min(86vw, 920px) clamp(130px, 28vw, 240px);
-    mask-size: auto, min(86vw, 920px) clamp(130px, 28vw, 240px);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
+    width: 86vw;
+    height: 28vw;
+    min-height: 130px;
   }
 
   .hero7-footer {

@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
 import Lenis from 'lenis'
 import 'lenis/dist/lenis.css'
 import NostaHero from './components/NostaHero'
-import AboutSection from './components/AboutSection'
 import HeroIntroPreloader from './components/HeroIntroPreloader'
 import { DEFAULT_CAMERA_COLOR } from './data/cameraColors'
 import './App.css'
 
 // Code splitting: heavy 3D WebGL stage & below-the-fold sections load asynchronously
 const Camera3DViewer = lazy(() => import('./components/Camera3DViewer'))
+const AboutSection = lazy(() => import('./components/AboutSection'))
 const MenuSection = lazy(() => import('./components/MenuSection'))
 const FeaturesCardsFlow = lazy(() => import('./components/FeaturesCardsFlow'))
 const CtaSection = lazy(() => import('./components/CtaSection'))
@@ -17,12 +17,23 @@ const FooterSection = lazy(() => import('./components/FooterSection'))
 export default function App() {
   const [cameraColor, setCameraColor] = useState(DEFAULT_CAMERA_COLOR)
   const [introFinished, setIntroFinished] = useState(false)
+  const [mountCamera, setMountCamera] = useState(false)
+  const [mountBelowFold, setMountBelowFold] = useState(false)
+
+  useEffect(() => {
+    if (!introFinished) return undefined
+    const rafId = requestAnimationFrame(() => setMountCamera(true))
+    const belowFoldTimer = setTimeout(() => setMountBelowFold(true), 120)
+    return () => {
+      cancelAnimationFrame(rafId)
+      clearTimeout(belowFoldTimer)
+    }
+  }, [introFinished])
 
   const handleRevealStart = useCallback(() => {
     document.getElementById('boot-curtain')?.remove()
     document.documentElement.style.backgroundColor = '#F2E4CC'
     document.body.style.backgroundColor = '#F2E4CC'
-    window.lenis?.start()
   }, [])
 
   const handleIntroComplete = useCallback(() => {
@@ -120,7 +131,7 @@ export default function App() {
         <div className="unified-camera-sticky-stage">
           <div style={{ width: '100%', height: '100%', pointerEvents: 'none' }}>
             <Suspense fallback={null}>
-              <Camera3DViewer cameraColor={cameraColor} />
+              {mountCamera && <Camera3DViewer cameraColor={cameraColor} />}
             </Suspense>
           </div>
         </div>
@@ -128,21 +139,23 @@ export default function App() {
         {/* 1. HERO VIEWPORT */}
         <NostaHero isIntroFinished={introFinished} />
 
-        {/* 2. ABOUT / ESSÊNCIA SECTION */}
-        <AboutSection />
-
-        {/* 3–5. LAZY BELOW-THE-FOLD SECTIONS */}
-        <Suspense fallback={null}>
-          <MenuSection />
-          <FeaturesCardsFlow />
-          <CtaSection selectedColor={cameraColor} onSelectColor={setCameraColor} />
-        </Suspense>
+        {/* 2–5. LAZY BELOW-THE-FOLD SECTIONS (montam após a intro para 0 travamento no preloader) */}
+        {mountBelowFold && (
+          <Suspense fallback={null}>
+            <AboutSection />
+            <MenuSection />
+            <FeaturesCardsFlow />
+            <CtaSection selectedColor={cameraColor} onSelectColor={setCameraColor} />
+          </Suspense>
+        )}
       </div>
 
       {/* 6. FOOTER */}
-      <Suspense fallback={null}>
-        <FooterSection />
-      </Suspense>
+      {mountBelowFold && (
+        <Suspense fallback={null}>
+          <FooterSection />
+        </Suspense>
+      )}
     </div>
   )
 }

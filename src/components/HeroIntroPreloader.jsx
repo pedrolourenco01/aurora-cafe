@@ -44,9 +44,54 @@ export default function HeroIntroPreloader({ onRevealStart, onComplete }) {
       return
     }
 
-    // Função idempotente para popular os caracteres com máscara
+    // Garante leitura do fontSize original do CSS mesmo após re-execução do StrictMode / HMR
+    ;[logoDarkEl, logoBeigeEl].forEach((el) => {
+      el.style.fontFamily = ''
+      el.style.fontSize = ''
+      el.style.fontWeight = ''
+      el.style.lineHeight = ''
+      el.style.letterSpacing = ''
+    })
+
+    // Espelha tipografia e kerning exatos da Hero mantendo a entrada letra a letra original
+    const heroTitleAtMount = document.querySelector('.nosta-hero-title')
+    const heroCs = heroTitleAtMount ? getComputedStyle(heroTitleAtMount) : null
+    const pillFontPx = parseFloat(getComputedStyle(logoDarkEl).fontSize) || 96
+    const heroFontPx = heroCs ? parseFloat(heroCs.fontSize) || pillFontPx : pillFontPx
+    const pillScale = heroFontPx > 0 ? pillFontPx / heroFontPx : 1
+
+    ;[logoDarkEl, logoBeigeEl].forEach((el) => {
+      if (heroCs) {
+        el.style.fontFamily = heroCs.fontFamily
+        el.style.fontSize = heroCs.fontSize
+        el.style.fontWeight = heroCs.fontWeight
+        el.style.lineHeight = heroCs.lineHeight
+        el.style.letterSpacing = heroCs.letterSpacing
+      }
+    })
+
+    // Mede offsets nativos de cada caractere na Hero (inclui kerning entre pares como T-A)
+    let heroCharLeftOffsets = null
+    if (heroTitleAtMount && heroTitleAtMount.firstChild?.nodeType === Node.TEXT_NODE) {
+      const textNode = heroTitleAtMount.firstChild
+      const dotSpan = heroTitleAtMount.querySelector('.nosta-hero-dot')
+      const heroBaseLeft = heroTitleAtMount.getBoundingClientRect().left
+      const range = document.createRange()
+      heroCharLeftOffsets = []
+      for (let i = 0; i < Math.min(textNode.textContent.length, 5); i++) {
+        range.setStart(textNode, i)
+        range.setEnd(textNode, i + 1)
+        heroCharLeftOffsets.push(range.getBoundingClientRect().left - heroBaseLeft)
+      }
+      if (dotSpan) {
+        heroCharLeftOffsets.push(dotSpan.getBoundingClientRect().left - heroBaseLeft)
+      }
+    }
+
+    // Função idempotente para popular os caracteres com máscara mantendo espaçamento exato da Hero
     function populateChars(el) {
       el.innerHTML = ''
+      const masks = []
       const nodes = []
       const text = 'NOSTA.'
       ;[...text].forEach((ch) => {
@@ -57,8 +102,27 @@ export default function HeroIntroPreloader({ onRevealStart, onComplete }) {
         inner.textContent = ch
         mask.appendChild(inner)
         el.appendChild(mask)
+        masks.push(mask)
         nodes.push(inner)
       })
+
+      if (heroCharLeftOffsets && heroCharLeftOffsets.length === masks.length) {
+        gsap.set(el, { scale: 1 })
+        const elRect = el.getBoundingClientRect()
+        const effectiveScale = el.offsetWidth > 0 && elRect.width > 0 ? elRect.width / el.offsetWidth : 1
+        const elBaseLeft = elRect.left
+        const deltas = masks.map((mask, i) => {
+          const rawLeft = (mask.getBoundingClientRect().left - elBaseLeft) / effectiveScale
+          return heroCharLeftOffsets[i] - rawLeft
+        })
+        masks.forEach((mask, i) => {
+          const ml = i === 0 ? deltas[0] : deltas[i] - deltas[i - 1]
+          if (Math.abs(ml) > 0.05) {
+            mask.style.marginLeft = `${ml}px`
+          }
+        })
+      }
+
       return nodes
     }
 
@@ -87,6 +151,13 @@ export default function HeroIntroPreloader({ onRevealStart, onComplete }) {
     const logoCharsBeige = populateChars(logoBeigeEl)
     const allLogoChars = [...logoCharsDark, ...logoCharsBeige]
     const footerLines = populateFooter(footerEl)
+    const logoBeigeLayerEl = progressBar.querySelector('.hero7-text-beige')
+    const heroTextureSyncEl = progressBar.querySelector('.hero7-hero-texture-sync')
+
+    let raf1 = 0
+    let raf2 = 0
+    let heroTitleTween = null
+    let introDone = false
 
     // Contexto GSAP que limpa e reconstrói perfeitamente em React StrictMode
     const ctx = gsap.context(() => {
@@ -94,44 +165,23 @@ export default function HeroIntroPreloader({ onRevealStart, onComplete }) {
       gsap.set(curtainEl, { opacity: 1, display: 'block' })
       // 2. Máscara oculta até a hora da abertura
       gsap.set(maskEl, { scale: 1, opacity: 0, transformOrigin: 'center center' })
-      // 3. Tipografia e barra de progresso no estado inicial
+      // 3. Tipografia e barra de progresso no estado inicial (entrada original letra a letra)
+      gsap.set([logoDarkEl, logoBeigeEl], {
+        scale: pillScale,
+        transformOrigin: '50% 50%'
+      })
       gsap.set(allLogoChars, { xPercent: 100 })
       gsap.set(footerLines, { yPercent: 100 })
-      gsap.set(progressBar, { clipPath: 'inset(0% 100% 0% 0% round 999px)' })
+      gsap.set(progressBar, { x: 0, xPercent: -100, opacity: 1, clipPath: 'none' })
+      if (logoBeigeLayerEl) {
+        gsap.set(logoBeigeLayerEl, { x: 0, xPercent: 100 })
+      }
       gsap.set(progressEl, { scale: 0.86, opacity: 1 })
 
-      // Simulação de preenchimento da barra
-      function animateProgress(duration = 2.0) {
-        const ptl = gsap.timeline()
-        const counterSteps = 3
-        let currentProgress = 0
-
-        for (let i = 0; i < counterSteps; i++) {
-          const finalStep = i === counterSteps - 1
-          const targetProgress = finalStep
-            ? 1
-            : Math.min(currentProgress + Math.random() * 0.35 + 0.15, 0.88)
-          currentProgress = targetProgress
-
-          const clipRight = Math.max(0, (1 - targetProgress) * 100)
-          ptl.to(progressBar, {
-            clipPath: `inset(0% ${clipRight}% 0% 0% round 999px)`,
-            duration: duration / counterSteps,
-            ease: 'power3.out',
-            onComplete: () => {
-              if (finalStep) {
-                progressBar.style.clipPath = 'none'
-                progressEl.style.backgroundColor = '#F2E4CC'
-              }
-            }
-          })
-        }
-        return ptl
-      }
-
       const tl = gsap.timeline({
-        delay: 0.15,
+        paused: true,
         onComplete: () => {
+          introDone = true
           if (container) {
             container.style.display = 'none'
           }
@@ -139,15 +189,15 @@ export default function HeroIntroPreloader({ onRevealStart, onComplete }) {
         }
       })
 
-      // Animação 1: Cápsula entra
+      // Animação 1: Cápsula entra suavemente após primeiro paint estabilizado
       tl.to(progressEl, {
         scale: 1,
         duration: 0.7,
         ease: 'power4.out'
       })
-        // Animação 2: Letras do logotipo entram deslizando
+        // Animação 2: Letras do logotipo entram deslizando em sincronia nas duas camadas
         .to(
-          allLogoChars,
+          logoCharsDark,
           {
             xPercent: 0,
             stagger: 0.04,
@@ -156,7 +206,17 @@ export default function HeroIntroPreloader({ onRevealStart, onComplete }) {
           },
           '<'
         )
-        // Animação 3: Legenda inferior sobe
+        .to(
+          logoCharsBeige,
+          {
+            xPercent: 0,
+            stagger: 0.04,
+            duration: 0.8,
+            ease: 'power4.inOut'
+          },
+          '<'
+        )
+        // Animação 3: Legenda inferior sobe suavemente
         .to(
           footerLines,
           {
@@ -165,23 +225,64 @@ export default function HeroIntroPreloader({ onRevealStart, onComplete }) {
             duration: 0.8,
             ease: 'power4.inOut'
           },
-          '0.15'
+          0.15
         )
-        // Animação 4: Barra bege avança revelando o texto em Marrom
-        .add(animateProgress(2.0), '<')
+        // Animação 4: Barra com textura idêntica à Hero (sem salto visual na transição)
+        .to(
+          progressBar,
+          {
+            xPercent: 0,
+            duration: 1.45,
+            ease: 'power2.inOut'
+          },
+          0.42
+        )
+        .to(
+          logoBeigeLayerEl,
+          {
+            xPercent: 0,
+            duration: 1.45,
+            ease: 'power2.inOut'
+          },
+          0.42
+        )
         // Animação 5: Legenda inferior sai
         .to(
           footerLines,
           {
             yPercent: -100,
-            stagger: 0.05,
-            duration: 0.4,
-            ease: 'power4.inOut'
+            stagger: 0.04,
+            duration: 0.35,
+            ease: 'power3.inOut'
           },
-          '+=0.1'
+          '-=0.1'
         )
-        // Preparação para a transição: libertar overflow e ocultar elementos não necessários
+        // Pré-posiciona o título real da Hero atrás do clone ANTES de revelar (evita piscar 1 frame)
         .add(() => {
+          const heroTitle = document.querySelector('.nosta-hero-title')
+          if (heroTitle && logoBeigeEl) {
+            const sourceRect = logoBeigeEl.getBoundingClientRect()
+            const targetRect = heroTitle.getBoundingClientRect()
+            const scaleRatio = sourceRect.width / targetRect.width
+            const deltaX = (sourceRect.left + sourceRect.width / 2) - (targetRect.left + targetRect.width / 2)
+            const deltaY = (sourceRect.top + sourceRect.height / 2) - (targetRect.top + targetRect.height / 2)
+
+            gsap.set(heroTitle, {
+              x: deltaX,
+              y: deltaY,
+              scale: scaleRatio,
+              transformOrigin: '50% 50%',
+              opacity: 1,
+              visibility: 'visible',
+              willChange: 'transform'
+            })
+          }
+        })
+        // Aguarda 2 frames para o compositor garantir o título da Hero já na cápsula antes de ocultar o clone
+        .to({}, { duration: 0.034 })
+        .addLabel('reveal')
+        .add(() => {
+          onRevealStartRef.current?.()
           if (progressEl) {
             progressEl.style.overflow = 'visible'
             progressEl.style.backgroundColor = 'transparent'
@@ -190,57 +291,39 @@ export default function HeroIntroPreloader({ onRevealStart, onComplete }) {
             progressBar.style.overflow = 'visible'
             progressBar.style.backgroundColor = 'transparent'
           }
+          if (heroTextureSyncEl) {
+            heroTextureSyncEl.style.display = 'none'
+          }
           if (logoDarkEl) {
             logoDarkEl.style.display = 'none'
           }
-        })
-        // Ativar máscara e ocultar cortina sólida para revelação do Hero
-        .set(maskEl, { opacity: 1 })
-        .set(curtainEl, { display: 'none' })
-        // Animação 6 & 7: Transição do NOSTA da cápsula para a Hero
+          if (logoBeigeEl) {
+            logoBeigeEl.style.opacity = '0'
+          }
+          const heroTitle = document.querySelector('.nosta-hero-title')
+          if (heroTitle) {
+            heroTitleTween = gsap.to(heroTitle, {
+              x: 0,
+              y: 0,
+              scale: 1,
+              duration: 1.56,
+              ease: 'power3.inOut',
+              overwrite: 'auto'
+            })
+          }
+        }, 'reveal')
+        // Ativar máscara e ocultar cortina sólida sincronizado com o título já posicionado
+        .set(maskEl, { opacity: 1 }, 'reveal')
+        .set(curtainEl, { display: 'none' }, 'reveal')
+        // Animação 6 & 7: Máscara abre suavemente para a Hero
         .to(
           maskEl,
           {
             scale: 8.5,
             duration: 1.6,
-            ease: 'power3.inOut',
-            onStart: () => {
-              onRevealStartRef.current?.()
-              const heroTitle = document.querySelector('.nosta-hero-title')
-              if (heroTitle && logoBeigeEl) {
-                const sourceRect = logoBeigeEl.getBoundingClientRect()
-                const targetRect = heroTitle.getBoundingClientRect()
-
-                const scaleRatio = sourceRect.width / targetRect.width
-                const deltaX = (sourceRect.left + sourceRect.width / 2) - (targetRect.left + targetRect.width / 2)
-                const deltaY = (sourceRect.top + sourceRect.height / 2) - (targetRect.top + targetRect.height / 2)
-
-                // Esconde o clone da cápsula
-                logoBeigeEl.style.opacity = '0'
-
-                // Coloca o título nativo da Hero na cápsula e faz ele expandir perfeitamente
-                gsap.fromTo(
-                  heroTitle,
-                  {
-                    x: deltaX,
-                    y: deltaY,
-                    scale: scaleRatio,
-                    transformOrigin: '50% 50%',
-                    opacity: 1,
-                    visibility: 'visible'
-                  },
-                  {
-                    x: 0,
-                    y: 0,
-                    scale: 1,
-                    duration: 1.6,
-                    ease: 'power3.inOut',
-                    overwrite: 'auto'
-                  }
-                )
-              }
-            }
-          }
+            ease: 'power3.inOut'
+          },
+          'reveal'
         )
         // Animação 8: Fade out sutil da máscara
         .to(
@@ -252,15 +335,34 @@ export default function HeroIntroPreloader({ onRevealStart, onComplete }) {
           },
           '-=0.35'
         )
+
+      // Inicia somente após o browser concluir o paint inicial (elimina travadinha no frame 0)
+      raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => {
+          tl.play(0)
+        })
+      })
     }, container)
 
     return () => {
-      // Revert apenas do container local do preloader
+      cancelAnimationFrame(raf1)
+      cancelAnimationFrame(raf2)
+      heroTitleTween?.kill()
       ctx.revert()
-      // Garante que o título da Hero nunca suma caso o preloader seja desmontado
+      ;[logoDarkEl, logoBeigeEl].forEach((el) => {
+        el.style.fontFamily = ''
+        el.style.fontSize = ''
+        el.style.fontWeight = ''
+        el.style.lineHeight = ''
+        el.style.letterSpacing = ''
+      })
       const heroTitle = document.querySelector('.nosta-hero-title')
       if (heroTitle) {
-        gsap.set(heroTitle, { opacity: 1, visibility: 'visible', clearProps: 'transform' })
+        if (!introDone) {
+          gsap.set(heroTitle, { x: 0, y: 0, scale: 1, opacity: 1, visibility: 'visible' })
+        } else {
+          gsap.set(heroTitle, { opacity: 1, visibility: 'visible' })
+        }
       }
     }
   }, []) // Nunca reinicia em eventos de scroll
@@ -280,9 +382,31 @@ export default function HeroIntroPreloader({ onRevealStart, onComplete }) {
           <h1 ref={logoDarkRef} aria-label="NOSTA." />
         </div>
 
-        {/* Camada Progresso: Preenchimento Bege revelando texto Marrom (#432817) */}
+        {/* Camada Progresso: Textura idêntica à Hero revelando texto Marrom (#432817) */}
         <div className="hero7-progress-fill" ref={progressBarRef}>
           <div className="hero7-logo-layer hero7-text-beige">
+            <div className="hero7-hero-texture-sync" aria-hidden="true">
+              <div className="nosta-hero-lighting" />
+              <div className="nosta-hero-grain" />
+              <img
+                src="/hero7/smoke-poster.webp"
+                alt=""
+                loading="eager"
+                decoding="sync"
+                className="nosta-hero-smoke"
+              />
+              <img
+                src="/hero7/smoke-poster.webp"
+                alt=""
+                loading="eager"
+                decoding="sync"
+                className="nosta-hero-smoke"
+              />
+              <div
+                className="film-grain-overlay"
+                style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 3 }}
+              />
+            </div>
             <h1 ref={logoBeigeRef} aria-label="NOSTA." />
           </div>
         </div>

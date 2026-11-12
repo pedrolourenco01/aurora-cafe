@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { motion } from 'motion/react'
 import gsap from 'gsap'
 import './NostaHero.css'
 
@@ -180,10 +179,10 @@ export default function NostaHero({ isIntroFinished = true }) {
         })
       })
 
-      // Câmera já renderizada opaca atrás da cortina, apenas com leve escala inicial
+      // Câmera oculta no início até o preloader terminar e as listras entrarem
       const cameraStage = document.querySelector('.unified-camera-sticky-stage')
       if (cameraStage) {
-        gsap.set(cameraStage, { opacity: 1, scale: 0.92, y: 18 })
+        gsap.set(cameraStage, { opacity: 0, scale: 0.85, y: 30 })
       }
 
       // Demais elementos de conteúdo ocultos
@@ -227,23 +226,23 @@ export default function NostaHero({ isIntroFinished = true }) {
       )
     })
 
-    // PASSO 2: A Câmera 3D mantém opacidade total e suaviza apenas a escala na entrada
+    // PASSO 2: A Câmera 3D entra com zoom cinematográfico e levitação sutil após as listras
     heroTl.add(() => {
       const cameraStage = document.querySelector('.unified-camera-sticky-stage')
       if (cameraStage) {
         gsap.fromTo(
           cameraStage,
           {
-            opacity: 1,
-            scale: 0.92,
-            y: 18
+            opacity: 0,
+            scale: 0.85,
+            y: 40
           },
           {
             opacity: 1,
             scale: 1,
             y: 0,
-            duration: 1.15,
-            ease: 'power3.out'
+            duration: 1.3,
+            ease: 'back.out(1.2)'
           }
         )
       }
@@ -350,7 +349,7 @@ export default function NostaHero({ isIntroFinished = true }) {
       <div className="nosta-hero-lighting" aria-hidden="true" />
       <div className="nosta-hero-grain" aria-hidden="true" />
 
-      {/* Poster imediato e camada atmosférica de vídeo atrás da cortina de entrada */}
+      {/* Poster imediato e camada atmosférica de vídeo (vídeo inicia apenas após a intro) */}
       <img
         src="/hero7/smoke-poster.webp"
         alt=""
@@ -360,22 +359,37 @@ export default function NostaHero({ isIntroFinished = true }) {
         fetchPriority="high"
         className="nosta-hero-smoke opacity-100"
       />
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="none"
-        poster="/hero7/smoke-poster.webp"
-        className="nosta-hero-smoke"
-        aria-hidden="true"
-      >
-        <source src="/hero7/smoke-optimized.webm" type="video/webm" />
-        <source src="/hero7/smoke-optimized.mp4" type="video/mp4" />
-      </video>
+      {isIntroFinished ? (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster="/hero7/smoke-poster.webp"
+          className="nosta-hero-smoke"
+          aria-hidden="true"
+        >
+          <source src="/hero7/smoke-optimized.webm" type="video/webm" />
+          <source src="/hero7/smoke-optimized.mp4" type="video/mp4" />
+        </video>
+      ) : (
+        <img
+          src="/hero7/smoke-poster.webp"
+          alt=""
+          aria-hidden="true"
+          loading="eager"
+          decoding="sync"
+          className="nosta-hero-smoke opacity-100"
+        />
+      )}
 
       {/* Listras Retrô Anos 70 (Terracota #C66736, Mostarda #D58334, Verde Oliva #85713E) */}
-      <div className="nosta-retro-stripes-container" aria-hidden="true">
+      <div
+        className="nosta-retro-stripes-container"
+        style={{ visibility: isIntroFinished ? 'visible' : 'hidden' }}
+        aria-hidden="true"
+      >
         {/* Versão Desktop (1792 x 858) */}
         <svg
           className="nosta-retro-stripes-svg nosta-stripes-desktop"
