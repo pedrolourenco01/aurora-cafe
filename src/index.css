@@ -2,6 +2,7 @@
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   
   /* Vintage Analog 60s/70s Camera Palette */
+  --color-intro-bg: #1A110B;        /* Espresso da cortina inicial / preloader */
   --color-bg-primary: #F2E4CC;      /* Bege creme envelhecido */
   --color-logo-nosta: #432817;      /* Marrom café escuro */
   --color-text-primary: #4A3020;    /* Marrom chocolate */
@@ -32,7 +33,7 @@ html, body {
   max-width: 100vw;
   min-height: 100%;
   font-family: var(--font-family);
-  background-color: var(--color-bg-primary, #F2E4CC);
+  background-color: var(--color-intro-bg, #1A110B);
   color: var(--color-text-primary, #4A3020);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

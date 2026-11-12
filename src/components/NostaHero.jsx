@@ -180,10 +180,10 @@ export default function NostaHero({ isIntroFinished = true }) {
         })
       })
 
-      // Câmera oculta no início
+      // Câmera já renderizada opaca atrás da cortina, apenas com leve escala inicial
       const cameraStage = document.querySelector('.unified-camera-sticky-stage')
       if (cameraStage) {
-        gsap.set(cameraStage, { opacity: 0, scale: 0.85, y: 30 })
+        gsap.set(cameraStage, { opacity: 1, scale: 0.92, y: 18 })
       }
 
       // Demais elementos de conteúdo ocultos
@@ -227,23 +227,23 @@ export default function NostaHero({ isIntroFinished = true }) {
       )
     })
 
-    // PASSO 2: A Câmera 3D entra com zoom cinematográfico e levitação sutil
+    // PASSO 2: A Câmera 3D mantém opacidade total e suaviza apenas a escala na entrada
     heroTl.add(() => {
       const cameraStage = document.querySelector('.unified-camera-sticky-stage')
       if (cameraStage) {
         gsap.fromTo(
           cameraStage,
           {
-            opacity: 0,
-            scale: 0.85,
-            y: 40
+            opacity: 1,
+            scale: 0.92,
+            y: 18
           },
           {
             opacity: 1,
             scale: 1,
             y: 0,
-            duration: 1.3,
-            ease: 'back.out(1.2)'
+            duration: 1.15,
+            ease: 'power3.out'
           }
         )
       }
@@ -341,18 +341,32 @@ export default function NostaHero({ isIntroFinished = true }) {
   }
 
   return (
-    <section className="nosta-hero-section" id="hero-nosta">
+    <section
+      className="nosta-hero-section"
+      id="hero-nosta"
+      style={{ backgroundColor: '#F2E4CC' }}
+    >
       {/* Camadas de Background Vintage Cinematográfico (Iluminação de Estúdio & Grão Analógico) */}
       <div className="nosta-hero-lighting" aria-hidden="true" />
       <div className="nosta-hero-grain" aria-hidden="true" />
 
-      {/* Camada Atmosférica Cinematográfica (Smoke Overlay Hero #7) */}
+      {/* Poster imediato e camada atmosférica de vídeo atrás da cortina de entrada */}
+      <img
+        src="/hero7/smoke-poster.webp"
+        alt=""
+        aria-hidden="true"
+        loading="eager"
+        decoding="sync"
+        fetchPriority="high"
+        className="nosta-hero-smoke opacity-100"
+      />
       <video
         autoPlay
         loop
         muted
         playsInline
         preload="none"
+        poster="/hero7/smoke-poster.webp"
         className="nosta-hero-smoke"
         aria-hidden="true"
       >
