@@ -1,224 +1,186 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { ShoppingBag, Star, ArrowRight, Check } from 'lucide-react'
-import { MENU_CATEGORIES, MENU_ITEMS } from '../data/menuData'
+import React, { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'motion/react'
+import ResponsivePicture from './ResponsivePicture'
+import { OPTIMIZED_IMAGES } from '../assets/optimized/manifest'
 import './MenuSection.css'
 
-const EASING = [0.19, 1, 0.22, 1]
+const retroCamShutter = OPTIMIZED_IMAGES.nosta1
+const retroCamLens = OPTIMIZED_IMAGES.nosta2
+const retroCamTactile = OPTIMIZED_IMAGES.nosta3
+const retroCamRolls = OPTIMIZED_IMAGES.nosta4
+const retroCamViewfinder = OPTIMIZED_IMAGES.nosta5
+const retroCamFlagship = OPTIMIZED_IMAGES.nosta6
 
 export default function MenuSection() {
-  const [activeCategory, setActiveCategory] = useState('cafes')
-  const [cartCount, setCartCount] = useState(0)
-  const [addedItemId, setAddedItemId] = useState(null)
+  const containerRef = useRef(null)
 
-  const currentItems = (MENU_ITEMS[activeCategory] || []).slice(0, 6)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end']
+  })
 
-  const handleAddToCart = (item) => {
-    setCartCount((prev) => prev + 1)
-    setAddedItemId(item.id)
-    setTimeout(() => {
-      setAddedItemId(null)
-    }, 1300)
-  }
+  // =========================================================================
+  // COREOGRAFIA RIGOROSAMENTE SEPARADA EM 2 FASES DISTINTAS:
+  //
+  // FASE 1 (Progresso 0.00 até 0.45):
+  // - O texto NOSTA. está fixo e centralizado.
+  // - As 5 imagens orbitam o texto perfeitamente separadas em colunas independentes:
+  //     * Imagem 1 (Shutter - GRANDE): topo centralizado
+  //     * Imagem 2 (Lente): topo esquerdo
+  //     * Imagem 3 (Controles R21): meio direito
+  //     * Imagem 4 (Filmes 35mm): baixo centro-esquerdo
+  //     * Imagem 5 (Viewfinder Leica): baixo direito
+  //
+  // FASE 2 (Progresso 0.45 até 0.65):
+  // - Todas as 5 imagens sobem e somem completamente pelo topo (-160vh).
+  // - Elas desaparecem da viewport com opacity -> 0.
+  //
+  // FASE 3 (Progresso 0.70 até 1.00) - SOMENTE AQUI A ÚLTIMA IMAGEM APARECE:
+  // - A tela está 100% vazia (somente o texto NOSTA.).
+  // - A 6ª imagem (flagship panorâmica gigante) sobe limpa, repousa exatamente
+  //   no centro da tela cobrindo o texto NOSTA., e depois prossegue para a próxima seção.
+  // =========================================================================
+
+  // Movimento UNIFICADO: Todas as imagens sobem na mesma velocidade (1:1) — ZERO PARALLAX
+  const yUnified = useTransform(
+    scrollYProgress,
+    [0, 0.28, 0.85, 1.0],
+    ['90vh', '0vh', '-145vh', '-145vh']
+  )
+
+  // Crescimento sutil e elegante das 5 imagens menores:
+  const scaleCard1 = useTransform(scrollYProgress, [0.00, 0.32], [0.85, 0.98])
+  const scaleCard2 = useTransform(scrollYProgress, [0.08, 0.44], [0.85, 0.98])
+  const scaleCard3 = useTransform(scrollYProgress, [0.04, 0.38], [0.85, 0.98])
+  const scaleCard4 = useTransform(scrollYProgress, [0.24, 0.62], [0.85, 0.98])
+  const scaleCard5 = useTransform(scrollYProgress, [0.22, 0.58], [0.85, 0.98])
+
+  // Imagem final (flagship) repousa elegante no centro sem zoom excessivo
+  const scaleFlagship = useTransform(
+    scrollYProgress,
+    [0.45, 0.85],
+    [0.82, 0.95]
+  )
 
   return (
-    <section id="menu" className="menu-section">
-      <motion.div
-        className="menu-section-container"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.08 }}
-        variants={{
-          hidden: { opacity: 0 },
-          visible: {
-            opacity: 1,
-            transition: {
-              staggerChildren: 0.10,
-              delayChildren: 0.1,
-            }
-          }
-        }}
-      >
-        {/* 1. Header: Menu Title + Cursive Accent + My Basket Action */}
-        <motion.div
-          className="menu-header-row"
-          variants={{
-            hidden: { opacity: 0, y: 22, filter: 'blur(3px)' },
-            visible: {
-              opacity: 1,
-              y: 0,
-              filter: 'blur(0px)',
-              transition: { duration: 0.8, ease: EASING }
-            }
-          }}
-        >
-          <div className="menu-title-block">
-            <h2 className="menu-main-title">
-              Menu
-              <span className="menu-cursive-subtitle">
-                {activeCategory === 'cafes' ? 'cafés especiais' : 
-                 activeCategory === 'doces' ? 'confeitaria fina' :
-                 activeCategory === 'brunch' ? 'cozinha artesanal' : 'bebidas geladas'}
-              </span>
+    <section id="menu" ref={containerRef} className="nosta-manifesto-sticky-wrapper">
+      {/* Background Vintage Cinematográfico */}
+      <div className="manifesto-lighting-overlay" aria-hidden="true" />
+      <div className="manifesto-grain-overlay" aria-hidden="true" />
+
+      {/* Linhas Sutis de Grid Arquitetural */}
+      <div className="manifesto-grid-lines" aria-hidden="true">
+        <span className="manifesto-grid-line manifesto-grid-line-1" />
+        <span className="manifesto-grid-line manifesto-grid-line-2" />
+      </div>
+
+      {/* ÚNICO FRAME STICKY DA VIEWPORT (Elimina conflitos de múltiplos elementos sticky) */}
+      <div className="manifesto-sticky-frame">
+        {/* 1. TEXTO ESTÁTICO / FIXADO NO FUNDO */}
+        <div className="manifesto-static-backdrop">
+          <div className="manifesto-content">
+            <h2 className="manifesto-title">
+              NOSTA<span className="manifesto-dot">.</span>
             </h2>
+            <p className="manifesto-subtext">
+              <span>It takes care of the background so you can stay focused,</span>
+              <span>sharp, and in full control of your day.</span>
+            </p>
           </div>
+        </div>
 
-          <div className="menu-header-actions">
-            <button className="menu-basket-btn" aria-label="Minha Sacola">
-              <ShoppingBag size={17} strokeWidth={2.2} className="menu-basket-icon" />
-              <span className="btn-text-roll">
-                <span className="btn-text-primary">MINHA SACOLA</span>
-                <span className="btn-text-secondary" aria-hidden="true">MINHA SACOLA</span>
-              </span>
-              {cartCount > 0 && (
-                <span className="basket-badge">{cartCount}</span>
-              )}
-            </button>
-          </div>
-        </motion.div>
-
-        {/* 2. Category Filter Pills */}
+        {/* 2. TODAS AS IMAGENS EM BLOCO ÚNICO — ZERO PARALLAX, VELOCIDADE 1:1 */}
         <motion.div
-          className="menu-categories-nav"
-          role="tablist"
-          variants={{
-            hidden: { opacity: 0, y: 18 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: { duration: 0.75, ease: EASING }
-            }
-          }}
+          className="manifesto-stage-1-group"
+          style={{ y: yUnified }}
         >
-          {MENU_CATEGORIES.map((cat) => {
-            const isActive = cat.id === activeCategory
-            return (
-              <button
-                key={cat.id}
-                role="tab"
-                aria-selected={isActive}
-                className={`menu-category-pill ${isActive ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat.id)}
-              >
-                {cat.name}
-              </button>
-            )
-          })}
-        </motion.div>
+          <div className="manifesto-stage-1-inner">
+            {/* CARD 1: Topo-Esquerda (Shutter dial) */}
+            <motion.div
+              className="manifesto-img-card card-1-shutter"
+              style={{ scale: scaleCard1 }}
+            >
+              <ResponsivePicture
+                image={retroCamShutter}
+                sizes="(max-width: 768px) 75vw, 460px"
+                alt="Vintage analog camera mechanical shutter speed dial"
+                loading="lazy"
+                decoding="async"
+              />
+            </motion.div>
 
-        {/* 3. Product Cards Grid (8 Cards: 4 top, 4 bottom) */}
-        <motion.div
-          className="menu-grid-wrapper"
-          variants={{
-            hidden: { opacity: 0, y: 24 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: { duration: 0.85, ease: EASING }
-            }
-          }}
-        >
-          <div className="menu-cards-grid">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`grid-${activeCategory}`}
-                className="menu-cards-inner-grid"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.40, ease: EASING }}
-              >
-                {currentItems.map((item, index) => {
-                  const isJustAdded = addedItemId === item.id
+            {/* CARD 2: Abaixo da 1ª imagem, deslocada à direita (Lente Carl Zeiss) */}
+            <motion.div
+              className="manifesto-img-card card-2-lens"
+              style={{ scale: scaleCard2 }}
+            >
+              <ResponsivePicture
+                image={retroCamLens}
+                sizes="(max-width: 768px) 75vw, 460px"
+                alt="Classic 35mm manual camera prime lens with aperture blades"
+                loading="lazy"
+                decoding="async"
+              />
+            </motion.div>
 
-                  return (
-                    <motion.div
-                      key={item.id}
-                      className="menu-brew-card"
-                      initial={{ opacity: 0, y: 26 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: 0.70,
-                        delay: index * 0.05,
-                        ease: EASING,
-                      }}
-                    >
-                      {/* Top Right Clean Rating */}
-                      <div className="menu-card-rating-clean">
-                        <span className="rating-number">{item.rating || '4.9'}</span>
-                        <Star size={14} className="rating-star-icon" fill="#B57738" color="#B57738" />
-                      </div>
+            {/* CARD 3: Meio-Direita (Dispositivo tátil e controles mecânicos R21) */}
+            <motion.div
+              className="manifesto-img-card card-3-tactile"
+              style={{ scale: scaleCard3 }}
+            >
+              <ResponsivePicture
+                image={retroCamTactile}
+                sizes="(max-width: 768px) 75vw, 460px"
+                alt="Tactile knurled knobs and mechanical controllers"
+                loading="lazy"
+                decoding="async"
+              />
+            </motion.div>
 
-                      {/* Product Image Stage (Dedicated upper section with white background) */}
-                      <div className="menu-card-img-stage">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="menu-card-product-img"
-                          loading="lazy"
-                        />
-                      </div>
+            {/* CARD 4: Baixo Centro-Esquerda (Rolos de filme 35mm e alavanca) */}
+            <motion.div
+              className="manifesto-img-card card-4-rolls"
+              style={{ scale: scaleCard4 }}
+            >
+              <ResponsivePicture
+                image={retroCamRolls}
+                sizes="(max-width: 768px) 75vw, 460px"
+                alt="Vintage 35mm analog film canisters and camera advance lever"
+                loading="lazy"
+                decoding="async"
+              />
+            </motion.div>
 
-                      {/* Bottom Content: Title, Subtitle, Price & Action CTA (Pure white space, 100% legible) */}
-                      <div className="menu-card-bottom-content">
-                        <div className="menu-card-content-block">
-                          <h3 className="menu-card-item-title">{item.name}</h3>
-                          <p className="menu-card-item-subtitle">{item.subtitle}</p>
-                        </div>
+            {/* CARD 5: Baixo-Direita (Viewfinder analógico vintage Leica M3) */}
+            <motion.div
+              className="manifesto-img-card card-5-viewfinder"
+              style={{ scale: scaleCard5 }}
+            >
+              <ResponsivePicture
+                image={retroCamViewfinder}
+                sizes="(max-width: 768px) 75vw, 460px"
+                alt="Vintage analog rangefinder camera viewfinder and prism housing"
+                loading="lazy"
+                decoding="async"
+              />
+            </motion.div>
 
-                        <div className="menu-card-action-footer">
-                          <span className="menu-card-price-tag">{item.price}</span>
-
-                          <button
-                            className={`menu-card-cta-link ${isJustAdded ? 'added' : ''}`}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleAddToCart(item)
-                            }}
-                            aria-label={`${item.ctaText || 'PEDIR AGORA'} - ${item.name}`}
-                          >
-                            {isJustAdded ? (
-                              <>
-                                <Check size={14} strokeWidth={2.8} />
-                                <span>ADICIONADO</span>
-                              </>
-                            ) : (
-                              <>
-                                <span>{item.ctaText || 'PEDIR AGORA'}</span>
-                                <ArrowRight size={14} strokeWidth={2.6} className="cta-arrow-icon" />
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )
-                })}
-              </motion.div>
-            </AnimatePresence>
+            {/* CARD 6: IMAGEM FINAL (FLAGSHIP) — Integrada no mesmo bloco, sem parallax */}
+            <motion.div
+              className="manifesto-img-card card-6-flagship"
+              style={{ y: '-50%', scale: scaleFlagship }}
+            >
+              <ResponsivePicture
+                image={retroCamFlagship}
+                sizes="(max-width: 768px) 92vw, 1120px"
+                alt="Cinematic vintage analog camera workshop and optical studio desk"
+                loading="lazy"
+                decoding="async"
+              />
+            </motion.div>
           </div>
         </motion.div>
-
-        {/* 4. Bottom Centered CTA */}
-        <motion.div
-          className="menu-bottom-cta-row"
-          variants={{
-            hidden: { opacity: 0, y: 16 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: { duration: 0.75, ease: EASING }
-            }
-          }}
-        >
-          <a href="#order" className="menu-more-btn" aria-label="Ver cardápio completo">
-            <span className="btn-text-roll">
-              <span className="btn-text-primary">FAZER PEDIDO COMPLETO</span>
-              <span className="btn-text-secondary" aria-hidden="true">FAZER PEDIDO COMPLETO</span>
-            </span>
-          </a>
-        </motion.div>
-      </motion.div>
+      </div>
     </section>
   )
 }

@@ -1,0 +1,318 @@
+/* ==========================================================================
+   NOSTA — Seção Infográfico Premium Minimalista (Proporção 16:9 Estúdio)
+   - Câmera 3D perfeitamente no centro como elemento principal
+   - Parada da câmera em sticky viewport
+   - Linhas extremamente finas e discretas em #F5F0E8 com pequenos pontos
+   - Traço horizontal refinado sob cada título
+   - Tipografia leve, sofisticada e limpa
+   ========================================================================== */
+
+.nosta-infographic-scroll-track {
+  position: relative;
+  width: 100%;
+  height: 220vh; /* Altura que garante a parada da câmera e a coreografia progressiva */
+  background-color: transparent;
+  color: #F5F0E8;
+  box-sizing: border-box;
+  overflow: visible;
+  z-index: 20;
+}
+
+/* Frame sticky que retém a tela e a câmera centrada durante toda a coreografia */
+.infographic-sticky-viewport {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Palco sofisticado com largura e altura adaptativas */
+.infographic-stage {
+  position: relative;
+  width: min(95vw, 1340px);
+  aspect-ratio: 1024 / 574;
+  max-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Camada SVG dos Conectores e Linhas Minimalistas */
+.infographic-lines-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Blocos de Cada Característica */
+.infographic-item {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.4vw, 20px);
+  pointer-events: auto;
+  z-index: 15;
+}
+
+/* Bolhas Circulares dos Destaques (Preenchimento total da imagem, sem sombras) */
+.infographic-bubble {
+  flex-shrink: 0;
+  width: clamp(108px, 10.5vw, 155px);
+  height: clamp(108px, 10.5vw, 155px);
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+}
+
+.infographic-bubble:hover {
+  transform: scale(1.035);
+  filter: brightness(1.06);
+  box-shadow: none !important;
+}
+
+.bubble-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* Bloco de Texto Compacto (Sem invadir a câmera nem colidir com linhas) */
+.infographic-text-block {
+  display: flex;
+  flex-direction: column;
+  max-width: clamp(160px, 14.5vw, 215px);
+}
+
+.text-left-side {
+  text-align: left;
+}
+
+.text-right-side {
+  text-align: left;
+}
+
+/* Título */
+.title-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.infographic-title {
+  font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+  font-size: clamp(0.94rem, 1.08vw, 1.20rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #F5F0E8;
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* Descrição */
+.infographic-description {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(0.68rem, 0.72vw, 0.84rem);
+  font-weight: 400;
+  line-height: 1.48;
+  letter-spacing: 0.01em;
+  color: rgba(245, 240, 232, 0.85);
+  margin: 0;
+}
+
+/* ==========================================================================
+   POSICIONAMENTO 2D ORGÂNICO E ASSIMÉTRICO (SEM GRADE RÍGIDA)
+   ========================================================================== */
+
+/* 1. FUNCIONALIDADES — Superior Esquerdo */
+.item-funcionalidades {
+  top: 4%;
+  left: 2%;
+}
+
+/* 2. FORMATO — Superior Direito */
+.item-formato {
+  top: 10%;
+  right: 2%;
+}
+
+/* 3. MATERIAIS — Inferior Esquerdo */
+.item-materiais {
+  bottom: 4%;
+  left: 2%;
+}
+
+/* 4. LENTE — Inferior Direito */
+.item-lente {
+  bottom: 10%;
+  right: 2%;
+}
+
+/* Tablets Retrato (901px..1180px, ex.: iPad Pro 13 1032x1376):
+   expande o palco verticalmente para afastar os blocos superiores/inferiores da câmera */
+@media (min-width: 901px) and (max-width: 1180px) and (orientation: portrait) {
+  .infographic-stage {
+    width: min(94vw, 980px);
+    aspect-ratio: auto;
+    height: min(74vh, 1000px);
+    max-height: 74vh;
+  }
+
+  .infographic-bubble {
+    width: clamp(96px, 10.5vw, 128px);
+    height: clamp(96px, 10.5vw, 128px);
+  }
+
+  .infographic-text-block {
+    max-width: clamp(185px, 21vw, 240px);
+  }
+
+  .infographic-title {
+    font-size: clamp(0.92rem, 1.45vw, 1.12rem);
+  }
+
+  .infographic-description {
+    font-size: clamp(0.72rem, 1.15vw, 0.86rem);
+    line-height: 1.44;
+  }
+
+  .item-funcionalidades {
+    top: 1%;
+    left: 2%;
+  }
+
+  .item-formato {
+    top: 3%;
+    right: 2%;
+  }
+
+  .item-materiais {
+    bottom: 4%;
+    left: 2%;
+  }
+
+  .item-lente {
+    bottom: 6%;
+    right: 2%;
+  }
+}
+
+/* Responsividade Mobile e Telas Menores */
+@media (max-width: 900px) {
+  .nosta-infographic-scroll-track {
+    height: 220svh;
+    min-height: 220svh;
+    padding: 0;
+  }
+
+  .infographic-sticky-viewport {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+
+  .infographic-stage {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    max-height: none;
+    display: block;
+    position: relative;
+  }
+
+  .infographic-lines-svg {
+    display: block;
+    z-index: 12;
+  }
+
+  .infographic-item {
+    position: absolute;
+    width: calc(50% - 18px);
+    max-width: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+
+  /* Duas acima da câmera */
+  .item-funcionalidades {
+    top: clamp(12px, 2.2svh, 24px);
+    left: 12px;
+    right: auto;
+    bottom: auto;
+  }
+
+  .item-formato {
+    top: clamp(12px, 2.2svh, 24px);
+    right: 12px;
+    left: auto;
+    bottom: auto;
+  }
+
+  /* Duas abaixo da câmera (alinhadas pelo topo para as bolhas ficarem na mesma altura) */
+  .item-materiais {
+    top: calc(100svh - clamp(156px, 22svh, 176px));
+    left: 12px;
+    bottom: auto;
+    right: auto;
+  }
+
+  .item-lente {
+    top: calc(100svh - clamp(156px, 22svh, 176px));
+    right: 12px;
+    bottom: auto;
+    left: auto;
+  }
+
+  .infographic-bubble {
+    width: clamp(50px, 13.5vw, 68px);
+    height: clamp(50px, 13.5vw, 68px);
+  }
+
+  .infographic-text-block,
+  .text-left-side,
+  .text-right-side {
+    max-width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+
+  .title-wrapper {
+    align-items: center;
+    margin-bottom: 3px;
+  }
+
+  .infographic-title {
+    font-size: clamp(10.5px, 2.9vw, 13px);
+    letter-spacing: 0.08em;
+  }
+
+  .infographic-description {
+    font-size: clamp(9.5px, 2.55vw, 11.5px);
+    line-height: 1.32;
+  }
+}

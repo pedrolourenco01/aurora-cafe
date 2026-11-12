@@ -1,0 +1,34 @@
+/* ==========================================================================
+   FEATURES & CARDS FLOW — Palco unificado de estúdio escuro (#170E08)
+   - Mantém o fundo 100% sólido escuro (#170E08), eliminando qualquer vazamento de luz
+   - Câmera 3D fica sticky no topo (100vh), iniciando em WhyVisit e descendo para os cards
+   - WhyVisitSection (100vh) fica no topo
+   - ProductCardsSection (380vh) fica embaixo
+   ========================================================================== */
+
+.features-cards-flow-container {
+  position: relative;
+  width: 100%;
+  background-color: #170E08 !important;
+  color: #F5ECE1;
+  overflow: visible;
+  border: none !important;
+  outline: none !important;
+}
+
+/* PALCO FIXO DE FUNDO ESTÚDIO MARROM QUENTE (Z-INDEX 1 - ATRÁS DA CÂMERA Z-INDEX 10) */
+.features-flow-sticky-backdrop {
+  position: sticky;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh + 4px);
+  margin-bottom: calc(-100vh - 4px);
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  background-color: #170E08;
+  border: none !important;
+  outline: none !important;
+}
+

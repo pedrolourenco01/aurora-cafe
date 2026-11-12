@@ -1,455 +1,213 @@
 /* ==========================================================================
-   Aurora Café - Why Visit / Experience Section Styles (Sticky Pinned Card Deck)
+   NOSTA — Features Section (Idêntico à Referência Oryzo)
+   - Câmera rigorosamente centralizada a 50% X e 50% Y da tela
+   - Texto da esquerda no topo-esquerdo em 3 linhas
+   - Texto da direita centralizado verticalmente em 3 linhas
+   - Fundo estúdio marrom quente #170E08
    ========================================================================== */
 
-.why-visit-section {
+.nosta-features-section {
   position: relative;
   width: 100%;
-  height: 460vh; /* Expanded smooth runway for silky, unhurried card glide */
-  background-color: #FAF5EE;
-  color: #4E2B12;
-  z-index: 6;
-}
-
-/* Sticky Viewport that stays completely pinned to the screen */
-.why-visit-sticky-viewport {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
+  min-height: 100vh;
   height: 100vh;
+  background-color: transparent;
+  color: #F5ECE1;
+  box-sizing: border-box;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 30px 40px 40px 40px;
-}
-
-.why-visit-container {
-  max-width: 1200px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 36px;
-}
-
-/* 1. Header Row */
-.why-visit-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 32px;
-  width: 100%;
-  max-width: 1140px;
-  position: relative;
-  padding-bottom: 0;
-}
-
-.why-visit-header-content {
-  display: flex;
-  flex-direction: column;
-  max-width: 720px;
-}
-
-.why-visit-main-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(2.8rem, 4.8vw, 4.2rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  color: #3E1E09;
-  line-height: 1.05;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  text-transform: none;
-}
-
-.why-visit-cursive-subtitle {
-  font-family: 'Caveat', 'Playball', cursive;
-  font-size: clamp(1.45rem, 2.3vw, 1.95rem);
-  font-weight: 600;
-  color: #8A5832;
-  letter-spacing: 0.01em;
-  margin-top: -2px;
-  text-transform: lowercase;
-}
-
-.why-visit-header-desc {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(14.5px, 1.15vw, 16px);
-  color: rgba(78, 43, 18, 0.75);
-  line-height: 1.55;
-  margin-top: 12px;
-}
-
-/* 2. Pinned Stacking Cards Stage - Large Scale matching reference */
-.why-visit-cards-stage {
-  position: relative;
-  width: 100%;
-  max-width: 1140px;
-  height: 460px;
-  display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 14px;
+  z-index: 20;
 }
 
-/* Absolute Animated Card Item */
-.why-visit-card-deck-item {
+/* 1. Iluminação e Efeitos de Fundo de Estúdio Marrom Quente */
+.features-lighting-glow {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  will-change: transform;
-  transform-origin: center center;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 65% 60% at 50% 50%, rgba(204, 128, 62, 0.24) 0%, rgba(78, 42, 22, 0.4) 45%, rgba(23, 14, 8, 0.98) 85%, #170E08 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
-/* Card Element - Expanded Scale & Clean Crisp Finish */
-.why-visit-card {
+
+.features-grain-overlay {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  background-color: #FFFFFF;
-  border-radius: 36px;
-  padding: 34px 44px;
-  display: flex;
-  align-items: center;
-  gap: 48px;
-  border: 1px solid rgba(84, 45, 23, 0.09);
-  box-shadow: none;
-  cursor: default;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.05;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='featuresGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23featuresGrain)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
 }
 
-.why-visit-card:hover {
-  box-shadow: none;
-}
-
-/* Left Colored Media Stage - Large square with generous rounded corners */
-.why-visit-card-media {
-  position: relative;
-  width: 380px;
-  height: 380px;
-  min-width: 380px;
-  border-radius: 28px;
+/* 2. Camada 3D da Câmera (Tamanho e proporção idênticos à Hero, 100% centralizada) */
+.features-camera-fullscreen-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 }
 
-.why-visit-product-img {
-  width: 88%;
-  height: 88%;
-  object-fit: contain;
-  transform: none;
+.features-camera-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(420px, 42vw, 620px);
+  height: clamp(420px, 42vw, 620px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(204, 128, 62, 0.35) 0%, rgba(85, 45, 23, 0.22) 50%, transparent 72%);
+  filter: blur(52px);
+  pointer-events: none;
 }
 
-/* Right Editorial Info */
-.why-visit-card-info {
+/* 3. Container de Textos (Flutuando sobre a seção) */
+.features-stage-container {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* --- TEXTO DA ESQUERDA (Posicionado no topo, 3 linhas) --- */
+.features-col-left {
+  position: absolute;
+  top: clamp(32px, 8.5vh, 96px);
+  left: clamp(32px, 6vw, 110px);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  flex: 1;
-  padding-right: 16px;
+  justify-content: flex-start;
+  z-index: 5;
+  pointer-events: auto;
 }
 
-.why-visit-card-badge {
-  display: inline-flex;
-  align-items: center;
-  font-family: 'Plus Jakarta Sans', var(--font-family);
-  font-size: 12px;
+.features-headline {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(2.2rem, 3.4vw, 4.2rem);
   font-weight: 800;
-  letter-spacing: 0.10em;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
   text-transform: uppercase;
-  color: #B57738;
-  margin-bottom: 8px;
-}
-
-.why-visit-card-title {
-  font-family: 'Plus Jakarta Sans', var(--font-family);
-  font-size: clamp(2.2rem, 3.2vw, 3rem);
-  font-weight: 900;
-  letter-spacing: -0.025em;
-  color: #3E1E09;
-  line-height: 1.12;
+  color: #F5ECE1;
   margin: 0;
 }
 
-.why-visit-card-desc {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(15px, 1.2vw, 16.5px);
-  color: rgba(78, 43, 18, 0.75);
-  line-height: 1.62;
-  margin-top: 14px;
-  margin-bottom: 26px;
-  max-width: 580px;
+.features-headline span {
+  display: block;
+  white-space: nowrap;
 }
 
-/* Pill Tags Row */
-.why-visit-tags-row {
+/* --- TEXTO DA DIREITA (Exatamente 3 linhas, centralizado verticalmente) --- */
+.features-col-right {
+  position: absolute;
+  top: 50%;
+  right: clamp(32px, 6vw, 110px);
+  transform: translateY(-50%);
   display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 5;
+  pointer-events: auto;
 }
 
-.why-visit-pill-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 18px;
-  border-radius: 9999px;
-  background-color: #F8F2EA;
-  color: #542D17;
-  font-family: 'Plus Jakarta Sans', var(--font-family);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+.features-lead-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(1.2rem, 1.65vw, 1.8rem);
+  line-height: 1.45;
+  color: #EDE3D8;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  margin: 0;
+  max-width: 500px;
+}
+
+.features-lead-text span {
+  display: block;
+  white-space: nowrap;
 }
 
 /* ==========================================================================
-   Responsive Breakpoints
+   RESPONSIVIDADE (Tablets e Mobile)
    ========================================================================== */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .why-visit-section {
-    height: auto !important;
-    padding: 60px 20px 70px 20px !important;
+@media (max-width: 1024px), (max-width: 1180px) and (orientation: portrait) {
+  .nosta-features-section {
+    min-height: 100svh;
+    height: 100svh;
   }
 
-  .why-visit-sticky-viewport {
-    position: static !important;
-    height: auto !important;
-    overflow: visible !important;
-    padding: 0 !important;
+  .features-stage-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding: 0;
   }
 
-  .why-visit-container {
-    gap: 36px !important;
-    max-width: 728px !important;
-    width: 100% !important;
-    margin: 0 auto !important;
+  .features-col-left {
+    position: absolute;
+    top: clamp(28px, 6svh, 54px);
+    left: 5.5vw;
+    right: auto;
+    transform: none;
+    text-align: left;
+    max-width: min(74vw, 275px);
   }
 
-  .why-visit-header {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 12px !important;
-    width: 100% !important;
+  .features-headline {
+    font-size: clamp(1.9rem, 8.6vw, 2.65rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
   }
 
-  .why-visit-header-content {
-    max-width: 100% !important;
+  .features-headline span {
+    display: inline;
+    white-space: normal;
   }
 
-  .why-visit-main-title {
-    font-size: clamp(2.6rem, 5.5vw, 3.6rem) !important;
+  .features-headline span:not(:last-child)::after {
+    content: ' ';
   }
 
-  .why-visit-cursive-subtitle {
-    font-size: clamp(1.4rem, 2.8vw, 1.9rem) !important;
+  .features-col-right {
+    position: absolute;
+    top: auto;
+    bottom: clamp(28px, 6svh, 54px);
+    right: 5.5vw;
+    left: auto;
+    transform: none;
+    text-align: right;
+    max-width: min(76vw, 290px);
   }
 
-  .why-visit-header-desc {
-    font-size: 15px !important;
-    margin-top: 10px !important;
-    line-height: 1.55 !important;
-    max-width: 100% !important;
+  .features-lead-text {
+    font-size: clamp(14.5px, 4vw, 17px);
+    line-height: 1.38;
+    font-weight: 600;
+    color: #F5ECE1;
   }
 
-  .why-visit-cards-stage {
-    position: static !important;
-    height: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 28px !important;
-    margin-top: 18px !important;
-    width: 100% !important;
+  .features-lead-text span {
+    display: inline;
+    white-space: normal;
   }
 
-  .why-visit-card-deck-item {
-    position: static !important;
-    width: 100% !important;
-    height: auto !important;
-    transform: none !important;
-    opacity: 1 !important;
-  }
-
-  .why-visit-card {
-    position: static !important;
-    height: auto !important;
-    width: 100% !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 24px !important;
-    padding: 30px 28px 32px 28px !important;
-    border-radius: 34px !important;
-    transform: none !important;
-    box-shadow: none !important;
-    border: 1px solid rgba(84, 45, 23, 0.09) !important;
-    box-sizing: border-box !important;
-  }
-
-  .why-visit-card-media {
-    width: 100% !important;
-    min-width: unset !important;
-    height: 330px !important;
-    border-radius: 26px !important;
-  }
-
-  .why-visit-product-img {
-    width: 82% !important;
-    height: 82% !important;
-    object-fit: contain !important;
-  }
-
-  .why-visit-card-info {
-    padding-right: 0 !important;
-    gap: 8px !important;
-    width: 100% !important;
-  }
-
-  .why-visit-card-badge {
-    font-size: 11.5px !important;
-    margin-bottom: 4px !important;
-  }
-
-  .why-visit-card-title {
-    font-size: 1.85rem !important;
-    line-height: 1.18 !important;
-  }
-
-  .why-visit-card-desc {
-    font-size: 15px !important;
-    line-height: 1.6 !important;
-    margin-top: 8px !important;
-    margin-bottom: 16px !important;
-    max-width: 100% !important;
-  }
-
-  .why-visit-tags-row {
-    gap: 8px !important;
-  }
-
-  .why-visit-pill-tag {
-    font-size: 12px !important;
-    padding: 6px 14px !important;
-  }
-}
-
-@media (max-width: 767px) {
-  .why-visit-section {
-    padding: 50px 16px 60px 16px !important;
-    height: auto !important;
-  }
-
-  .why-visit-sticky-viewport {
-    position: static !important;
-    height: auto !important;
-    overflow: visible !important;
-    padding: 0 !important;
-  }
-
-  .why-visit-container {
-    gap: 28px !important;
-    max-width: 440px !important;
-    width: 100% !important;
-  }
-
-  .why-visit-header {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 10px !important;
-  }
-
-  .why-visit-header-content {
-    max-width: 100% !important;
-  }
-
-  .why-visit-main-title {
-    font-size: clamp(2.2rem, 7vw, 3.2rem) !important;
-  }
-
-  .why-visit-cursive-subtitle {
-    font-size: clamp(1.3rem, 4.2vw, 1.8rem) !important;
-  }
-
-  .why-visit-header-desc {
-    font-size: 13.5px !important;
-    margin-top: 8px !important;
-    line-height: 1.5 !important;
-  }
-
-  .why-visit-cards-stage {
-    position: static !important;
-    height: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 20px !important;
-    margin-top: 16px !important;
-    width: 100% !important;
-  }
-
-  .why-visit-card-deck-item {
-    position: static !important;
-    width: 100% !important;
-    height: auto !important;
-    transform: none !important;
-    opacity: 1 !important;
-  }
-
-  .why-visit-card {
-    position: static !important;
-    height: auto !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 16px !important;
-    padding: 20px 18px 22px 18px !important;
-    border-radius: 28px !important;
-    transform: none !important;
-    box-shadow: none !important;
-    border: 1px solid rgba(84, 45, 23, 0.09) !important;
-  }
-
-  .why-visit-card-media {
-    width: 100% !important;
-    min-width: unset !important;
-    height: 190px !important;
-    border-radius: 20px !important;
-  }
-
-  .why-visit-product-img {
-    width: 80% !important;
-    height: 80% !important;
-    object-fit: contain !important;
-  }
-
-  .why-visit-card-info {
-    padding-right: 0 !important;
-    gap: 6px !important;
-  }
-
-  .why-visit-card-badge {
-    font-size: 11px !important;
-    margin-bottom: 2px !important;
-  }
-
-  .why-visit-card-title {
-    font-size: 1.35rem !important;
-  }
-
-  .why-visit-card-desc {
-    font-size: 13px !important;
-    margin-top: 6px !important;
-    margin-bottom: 10px !important;
-  }
-
-  .why-visit-tags-row {
-    gap: 6px !important;
-  }
-
-  .why-visit-pill-tag {
-    font-size: 11px !important;
-    padding: 4px 10px !important;
+  .features-lead-text span:not(:last-child)::after {
+    content: ' ';
   }
 }

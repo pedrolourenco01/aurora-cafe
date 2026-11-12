@@ -7,7 +7,7 @@
   width: 100%;
   padding: 68px 0 74px 0;
   overflow: hidden;
-  background-color: #FAF5EE;
+  background-color: var(--color-bg-primary, #F2E4CC);
   pointer-events: none;
   user-select: none;
   z-index: 5;
@@ -28,8 +28,9 @@
 
 .curved-text-track-wrap {
   position: relative;
-  width: 120vw;
-  margin-left: -10vw;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -51,7 +52,7 @@
 }
 
 .curved-svg-text.text-accent-primary {
-  fill: #4E2B12;
+  fill: var(--color-logo-nosta, #432817);
   opacity: 0.88;
 }
 

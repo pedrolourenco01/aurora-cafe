@@ -1,0 +1,730 @@
+/* ==========================================================================
+   NOSTA Hero Section — Exact Blueprint Reproduction (1792 x 858 Reference)
+   ========================================================================== */
+
+.nosta-hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  height: 100svh;
+  overflow: hidden;
+  background-color: #F2E4CC;
+  box-sizing: border-box;
+  color: #4A3020;
+}
+
+/* ==========================================================================
+   EFEITOS DE BACKGROUND CINEMATOGRÁFICO DOS ANOS 70
+   1. Iluminação central de estúdio suave atrás da câmera (#FFF3DE -> #F2E4CC)
+   2. Vinheta orgânica nas extremidades em tons caramelo (#D9BF99)
+   3. Textura de Film Grain analógico vintage (opacidade 4.5%)
+   ========================================================================== */
+
+.nosta-hero-lighting {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    /* 2. Vinheta sutil nas extremidades em tons caramelo #D9BF99 */
+    radial-gradient(ellipse 92% 86% at 50% 56%, transparent 46%, rgba(217, 191, 153, 0.45) 80%, rgba(206, 175, 132, 0.7) 100%),
+    /* 1. Iluminação central suave de estúdio em creme iluminado #FFF3DE */
+    radial-gradient(ellipse 65% 58% at 50% 56%, #FFF3DE 0%, rgba(255, 243, 222, 0.85) 32%, rgba(242, 228, 204, 0.95) 68%, #F2E4CC 100%);
+}
+
+.nosta-hero-grain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.045;
+  /* 4.5% de opacidade (entre 3% e 6%) para papel fotográfico vintage */
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grainFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.nosta-hero-smoke {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  filter: contrast(115%) sepia(40%);
+}
+
+/* ==========================================================================
+   LISTRAS RETRÔ DOS ANOS 1970 (3 FAIXAS GROSSAS EM L ARREDONDADO INVERTIDO)
+   - Terracota: #C66736
+   - Laranja mostarda: #D58334
+   - Verde oliva vintage: #85713E
+   - Z-Index: 3 (Fica atrás da câmera z-index: 10 e dos textos z-index: 20)
+   - Espaçamento com o fundo creme aparecendo como linha divisória fina
+   ========================================================================== */
+
+.nosta-retro-stripes-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.nosta-retro-stripes-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.nosta-stripes-desktop {
+  display: block;
+}
+
+.nosta-stripes-mobile {
+  display: none;
+}
+
+.nosta-stripes-grain-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.14;
+  mix-blend-mode: color-burn;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='stripeNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23stripeNoise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* ==========================================================================
+   LINHAS DE GRID ARQUITETURAL / EDITORIAL (Inspirado no Design Suíço e Noren)
+   - Linhas verticais elegantes que delimitam as colunas da composição
+   - Espessura de 1px em tom café suave e translúcido
+   - Posicionamento nos terços da viewport: 33.333% e 66.666%
+   ========================================================================== */
+
+.nosta-grid-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.nosta-grid-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(67, 40, 23, 0.12);
+  pointer-events: none;
+}
+
+.nosta-grid-line-1 {
+  left: 33.333%;
+}
+
+.nosta-grid-line-2 {
+  left: 66.666%;
+}
+
+/* =========================================
+   ELEMENTO 01 — Texto Superior Esquerdo
+   - Distância da esquerda: 4.2% da largura
+   - Distância do topo: 5.5% da altura
+   - Cor: #62602D, Ponto: #C2640C
+   - Fonte sans-serif, bold, ~11px, letter-spacing: 1.2px
+   ========================================= */
+.nosta-eyebrow-wrapper {
+  position: absolute;
+  left: 4.2%;
+  top: 5.5%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 20;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.nosta-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #C2640C;
+  flex-shrink: 0;
+}
+
+.nosta-eyebrow-text {
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #62602D;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* =========================================
+   ELEMENTO 02 — Logo Gigante NOSTA.
+   - Início horizontal: 4.2% da viewport
+   - Região vertical: 8.5% a 27% da altura (top: 8.5%)
+   - Ocupa ~39% da largura da tela
+   - Imediatamente abaixo do texto superior esquerdo
+   - Fonte peso 900, Line height: 0.85, Letter spacing negativo
+   - Letras: #432817, Ponto final: #C2640C
+   ========================================= */
+.nosta-hero-title {
+  position: absolute;
+  left: 4.2%;
+  margin-left: -0.065em;
+  /* Alinhamento óptico: compensa o recuo interno da fonte para alinhar a haste do N com o card */
+  top: 8.5%;
+  font-family: 'Outfit', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 900;
+  font-size: clamp(4.2rem, 12.5vw, 230px);
+  line-height: 0.85;
+  letter-spacing: -0.015em;
+  color: #432817;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  padding: 0;
+  text-shadow: none;
+  white-space: nowrap;
+  z-index: 20;
+  user-select: none;
+  pointer-events: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.nosta-hero-dot {
+  color: #C2640C;
+}
+
+/* =========================================
+   ELEMENTO 03 — Pequeno Menu com Popup
+   - Posicionado no canto superior direito: right: 4.3%, top: 5.5%
+   - Cores da marca: #432817, #F2E4CC, #C2640C, #BFA17A
+   ========================================= */
+/* =========================================
+   ELEMENTO 03 — Menu Superior Direito Fluido GSAP
+   - Posicionado no canto superior direito: right: 4.3%, top: 5.5%
+   - Cores da marca: #382418, #F2E4CC, #C2640C, #BFA17A
+   ========================================= */
+.nosta-menu-container {
+  position: absolute;
+  right: 4.3%;
+  top: 5.5%;
+  z-index: 50;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.nosta-menu-capsule {
+  width: 172px;
+  height: 44px;
+  /* animado suavemente com GSAP */
+  background-color: #382418;
+  /* Marrom café vintage do site */
+  border: 1px solid #BFA17A;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  filter: none !important;
+  box-sizing: border-box;
+  cursor: pointer;
+  will-change: height;
+}
+
+.nosta-capsule-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 42px;
+  padding: 0 24px;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.nosta-capsule-title {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F2E4CC;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  will-change: opacity;
+}
+
+.nosta-capsule-dots-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5px;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.nosta-capsule-dot {
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 50%;
+  background-color: #F2E4CC;
+  display: block;
+  flex-shrink: 0;
+}
+
+.nosta-capsule-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  padding: 2px 24px 16px 24px;
+  box-sizing: border-box;
+  will-change: opacity, visibility;
+}
+
+.nosta-capsule-link {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #F2E4CC;
+  text-decoration: none;
+  text-align: center;
+  transition: color 0.15s ease;
+  display: block;
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+.nosta-capsule-link:hover {
+  color: #C2640C;
+  transform: none;
+}
+
+/* =========================================
+   ELEMENTO 04 — Câmera Central 3D
+   - Centro horizontal: 50% da viewport
+   - Centro vertical: ~58% da viewport
+   - Renderizada com nitidez total ocupando o palco central
+   ========================================= */
+.nosta-camera-stage-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+/* =========================================
+   ELEMENTO 05 — Texto Descritivo à Direita
+   - Início horizontal: ~74% da largura
+   - Início vertical: ~48% da altura
+   - Largura máxima: 370px
+   - Cor: #4A3020, Font size: 20px, Line height: 1.3
+   ========================================= */
+.nosta-hero-right-copy {
+  position: absolute;
+  left: 71%;
+  top: 48%;
+  transform: translateY(-50%);
+  max-width: 540px;
+  width: auto;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(17px, 1.25vw, 22.5px);
+  font-weight: 700;
+  line-height: 1.34;
+  letter-spacing: -0.018em;
+  color: #4A3020;
+  text-align: left;
+  z-index: 20;
+  pointer-events: auto;
+  text-shadow: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.nosta-copy-line {
+  display: block;
+  white-space: nowrap;
+}
+
+/* =========================================
+   ELEMENTO 06 — Card Inferior Esquerdo
+   - Left: 4.2%
+   - Bottom: 6.3%
+   - Largura: 336px, Altura: 158px
+   - Fundo: #DDC5A1, Borda: 1px solid #BFA17A
+   - Padding: 26px, Border radius: 12px
+   - Título: #62602D, Divisória: #BFA17A, Descrição: #4A3020
+   ========================================= */
+.nosta-hero-bottom-card {
+  position: absolute;
+  left: 4.2%;
+  bottom: 6.3%;
+  width: 336px;
+  min-height: 158px;
+  background-color: #DDC5A1;
+  border: 1px solid #BFA17A;
+  border-radius: 12px;
+  padding: 26px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: none;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.nosta-card-headline {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #62602D;
+  margin: 0;
+}
+
+.nosta-card-divider {
+  width: 100%;
+  height: 1px;
+  background-color: #BFA17A;
+  margin: 10px 0;
+}
+
+.nosta-card-subtext {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #4A3020;
+  margin: 0;
+}
+
+/* =========================================
+   ELEMENTO 07 — Scroll Inferior Direito
+   - Right: 4.3%
+   - Bottom: 5%
+   - Cor: #62602D, Font size: 12px, Weight: 700, Letter spacing: 2px
+   ========================================= */
+.nosta-hero-scroll-indicator {
+  position: absolute;
+  right: 4.3%;
+  bottom: 5%;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #62602D;
+  text-decoration: none;
+  z-index: 20;
+  pointer-events: auto;
+  transition: color 0.25s ease;
+}
+
+.nosta-hero-scroll-indicator:hover {
+  color: #C2640C;
+}
+
+/* =========================================
+   RESPONSIVIDADE (Tablet & Mobile)
+   ========================================= */
+@media (max-width: 1280px) {
+  .nosta-hero-title {
+    font-size: clamp(4rem, 12vw, 185px);
+  }
+
+  .nosta-hero-right-copy {
+    font-size: clamp(15px, 1.3vw, 19px);
+    max-width: 440px;
+    left: 70%;
+  }
+
+  .nosta-camera-stage-wrapper {
+    width: min(38vw, 480px);
+    height: min(28vw, 320px);
+  }
+
+  .nosta-hero-bottom-card {
+    width: 300px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 900px),
+(max-width: 1180px) and (orientation: portrait) {
+  .nosta-hero-section {
+    height: 100svh;
+    min-height: 100svh;
+    max-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px 5vw 18px 5vw;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* 1. Header Row no Mobile: Eyebrow e Menu alinhados */
+  .nosta-eyebrow-wrapper {
+    position: relative;
+    top: auto;
+    left: auto;
+    max-width: calc(100% - 104px);
+    margin-top: 2px;
+    margin-bottom: 0;
+    z-index: 20;
+  }
+
+  .nosta-eyebrow-text {
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nosta-menu-container {
+    position: absolute;
+    top: 16px;
+    right: 5vw;
+    z-index: 70;
+  }
+
+  .nosta-menu-capsule {
+    width: 90px;
+    height: 38px;
+    border-radius: 19px;
+  }
+
+  .nosta-capsule-header {
+    height: 36px;
+    padding: 0 14px;
+  }
+
+  .nosta-capsule-title {
+    font-size: 13px;
+  }
+
+  .nosta-capsule-dots-wrapper {
+    gap: 2.5px;
+  }
+
+  .nosta-capsule-nav {
+    padding: 0 14px 12px 14px;
+    gap: 9px;
+  }
+
+  .nosta-capsule-link {
+    font-size: 13px;
+  }
+
+  /* 2. Título NOSTA. bem posicionado no topo do Mobile */
+  .nosta-hero-title {
+    position: relative;
+    top: auto;
+    left: auto;
+    align-self: flex-start;
+    margin-top: 14px;
+    margin-bottom: 0;
+    margin-left: 0;
+    font-size: clamp(2.85rem, 13.8vw, 4.2rem);
+    line-height: 0.88;
+    width: fit-content;
+    z-index: 20;
+  }
+
+  /* 3. Palco Central da Câmera (centralizado na tela) */
+  .nosta-camera-stage-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    margin: 0;
+  }
+
+  /* 4. Texto Descritivo ancorado na parte inferior abaixo da câmera */
+  .nosta-hero-right-copy {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    max-width: 100%;
+    width: 100%;
+    font-size: clamp(12.5px, 3.4vw, 14px);
+    line-height: 1.38;
+    text-align: center;
+    margin: auto auto 14px auto;
+    padding: 0 8px;
+    box-sizing: border-box;
+    z-index: 20;
+  }
+
+  .nosta-copy-line {
+    white-space: normal;
+    display: inline;
+  }
+
+  /* 5. Card Inferior no Mobile */
+  .nosta-hero-bottom-card {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    min-height: auto;
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin: 0;
+    z-index: 20;
+  }
+
+  .nosta-card-headline {
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    line-height: 1.35;
+  }
+
+  .nosta-card-divider {
+    margin: 6px 0;
+  }
+
+  .nosta-card-subtext {
+    font-size: 11.5px;
+    line-height: 1.35;
+  }
+
+  .nosta-grid-lines {
+    display: none;
+  }
+
+  .nosta-hero-scroll-indicator {
+    display: none;
+  }
+
+  .nosta-stripes-desktop {
+    display: none !important;
+  }
+
+  .nosta-stripes-mobile {
+    display: block !important;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1180px) and (orientation: portrait) {
+  .nosta-hero-section {
+    padding: 32px 4.5vw 28px 4.5vw;
+  }
+
+  .nosta-eyebrow-wrapper {
+    max-width: calc(100% - 170px);
+    margin-top: 4px;
+    gap: 10px;
+  }
+
+  .nosta-eyebrow-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .nosta-eyebrow-text {
+    font-size: 14px;
+    letter-spacing: 1.3px;
+  }
+
+  .nosta-menu-container {
+    top: 26px;
+    right: 6.6vw;
+  }
+
+  .nosta-menu-capsule {
+    width: 118px;
+    height: 44px;
+    border-radius: 22px;
+  }
+
+  .nosta-capsule-header {
+    height: 42px;
+    padding: 0 20px;
+  }
+
+  .nosta-capsule-title {
+    font-size: 15px;
+  }
+
+  .nosta-capsule-nav {
+    padding: 0 18px 14px 18px;
+    gap: 11px;
+  }
+
+  .nosta-capsule-link {
+    font-size: 15px;
+  }
+
+  .nosta-hero-title {
+    font-size: clamp(5.2rem, 13.2vw, 8.8rem);
+    margin-top: 16px;
+  }
+
+  .nosta-hero-right-copy {
+    font-size: 23px;
+    line-height: 1.42;
+    max-width: 720px;
+    margin: auto auto 28px auto;
+  }
+
+  .nosta-hero-bottom-card {
+    padding: 24px 28px;
+    border-radius: 16px;
+  }
+
+  .nosta-card-headline {
+    font-size: 15.5px;
+    line-height: 1.35;
+  }
+
+  .nosta-card-divider {
+    margin: 10px 0;
+  }
+
+  .nosta-card-subtext {
+    font-size: 16.5px;
+    line-height: 1.4;
+  }
+}

@@ -1,225 +1,257 @@
-import React from 'react'
-import { motion } from 'motion/react'
-import { ArrowUpRight, ArrowUp, Coffee } from 'lucide-react'
+import React, { useEffect, useRef } from 'react'
+import gsap from 'gsap'
 import './FooterSection.css'
 
-const EASING = [0.19, 1, 0.22, 1]
-
-// Steaming Hot Takeaway Coffee Cup Icon matching the Navbar
-function HotCoffeeCupIcon({ size = 30, className = "" }) {
-  return (
-    <div className={`steaming-cup-icon-wrapper ${className}`} style={{ width: size, height: size }}>
-      <svg
-        width={size}
-        height={size}
-        viewBox="0 0 32 32"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        className="steaming-cup-svg"
-      >
-        <defs>
-          <linearGradient id="footerSteamGrad" x1="0" y1="10" x2="0" y2="-6" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="currentColor" stopOpacity="0" />
-            <stop offset="25%" stopColor="currentColor" stopOpacity="0.85" />
-            <stop offset="70%" stopColor="currentColor" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-
-        {/* GSAP-Inspired Fluid Continuous Steam Waves */}
-        <g className="gsap-steam-group">
-          <path
-            d="M13.5 10 C11 7, 15.5 4, 12.5 0.5 C9.5 -3, 14.5 -6, 12 -9"
-            stroke="url(#footerSteamGrad)"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-            className="gsap-steam-path gsap-steam-1"
-          />
-          <path
-            d="M18.5 10 C21 7, 16.5 4, 19.5 0.5 C22.5 -3, 17.5 -6, 20 -9"
-            stroke="url(#footerSteamGrad)"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-            className="gsap-steam-path gsap-steam-2"
-          />
-        </g>
-
-        {/* Cup Lid Cap */}
-        <rect x="8.5" y="10" width="15" height="3" rx="1.2" fill="currentColor" />
-        <path d="M12 9H20" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-
-        {/* Takeaway Cup Body */}
-        <path
-          d="M9.5 13.5L11.8 28.2C11.9 28.7 12.3 29 12.8 29H19.2C19.7 29 20.1 28.7 20.2 28.2L22.5 13.5H9.5Z"
-          fill="currentColor"
-        />
-
-        {/* Cup Sleeve (Central Wrap Overlay) */}
-        <path
-          d="M10.2 17.5L11 23H21L21.8 17.5H10.2Z"
-          fill="rgba(255, 255, 255, 0.28)"
-        />
-      </svg>
-    </div>
-  )
-}
-
 export default function FooterSection() {
-  const scrollToTop = (e) => {
-    e.preventDefault()
-    if (window.lenis) {
-      window.lenis.scrollTo(0, { duration: 1.8, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) })
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+  const footerRef = useRef(null)
+  const stripe1Ref = useRef(null)
+  const stripe2Ref = useRef(null)
+  const stripe3Ref = useRef(null)
+  const stripe1MobRef = useRef(null)
+  const stripe2MobRef = useRef(null)
+  const stripe3MobRef = useRef(null)
+
+  useEffect(() => {
+    const stripeGroups = [
+      [stripe1Ref.current, stripe1MobRef.current].filter(Boolean),
+      [stripe2Ref.current, stripe2MobRef.current].filter(Boolean),
+      [stripe3Ref.current, stripe3MobRef.current].filter(Boolean),
+    ]
+    const allStripes = stripeGroups.flat()
+    if (!allStripes.length) return
+
+    const getLen = (path) => {
+      try {
+        return Math.max(path.getTotalLength() || 0, 2600)
+      } catch (e) {
+        return 4500
+      }
     }
-  }
+
+    // Estado inicial: Escondido no topo com strokeDashoffset
+    allStripes.forEach((path) => {
+      const len = getLen(path)
+      gsap.set(path, {
+        strokeDasharray: len,
+        strokeDashoffset: -len,
+        opacity: 0
+      })
+    })
+
+    let hasAnimated = false
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            hasAnimated = true
+
+            const tl = gsap.timeline({ delay: 0.15 })
+
+            // Percorre as 3 listras desenhando de cima até a esquerda total
+            stripeGroups.forEach((group, i) => {
+              group.forEach((path) => {
+                const len = getLen(path)
+                tl.fromTo(
+                  path,
+                  {
+                    strokeDasharray: len,
+                    strokeDashoffset: -len,
+                    opacity: 1
+                  },
+                  {
+                    strokeDashoffset: 0,
+                    duration: 1.4,
+                    ease: 'power3.out',
+                    onComplete: () => {
+                      // Garante 100% que a linha vá até o final sem cortes
+                      path.style.strokeDasharray = 'none'
+                      path.style.strokeDashoffset = 'none'
+                    }
+                  },
+                  i === 0 ? 0 : 0.08 * i
+                )
+              })
+            })
+          }
+        })
+      },
+      { threshold: 0.05 }
+    )
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current)
+    }
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   return (
-    <footer className="footer-section" id="footer" aria-label="Rodapé do site">
-      {/* 1. Upper Banner: Rich Warm Espresso Satin Background */}
-      <div className="footer-banner-wrap">
-        <motion.div 
-          className="footer-hero-headline"
-          initial={{ opacity: 0, y: 36 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.9, ease: EASING }}
+    <footer className="nosta-footer-wrap" id="footer" ref={footerRef} aria-label="Rodapé Nosta">
+      {/* 1. Iluminação de estúdio suave idêntica à Hero */}
+      <div className="footer-lighting" aria-hidden="true" />
+
+      {/* 2. Textura granulada analógica vintage de papel fotográfico (4.5% idêntica à Hero) */}
+      <div className="footer-grain" aria-hidden="true" />
+
+      {/* 3. Três listras retrô contínuas dos anos 70 100% IDÊNTICAS À HERO:
+             - Espessura de 60px com gap de 8px (step de 68px)
+             - Cores exatas da Hero: Terracota #C66736, Laranja Mostarda #D58334, Verde Oliva #85713E
+             - Animam começando de cima e percorrendo até a esquerda
+      */}
+      <div className="footer-stripes-container" aria-hidden="true">
+        {/* Versão Desktop (1792 x 1000) */}
+        <svg
+          className="footer-stripes-svg footer-stripes-desktop"
+          viewBox="0 0 1792 1000"
+          preserveAspectRatio="none"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          <h2 className="footer-headline-text">
-            Seu próximo café favorito está aqui.
-          </h2>
-        </motion.div>
+          <defs>
+            <filter id="retroStripeGrainFooter" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" result="noise" />
+              <feColorMatrix type="matrix" values="0 0 0 0 0.25   0 0 0 0 0.15   0 0 0 0 0.08  0 0 0 0.42 0" in="noise" result="coloredNoise" />
+              <feComposite operator="in" in="coloredNoise" in2="SourceGraphic" result="grainPattern" />
+              <feBlend mode="multiply" in="grainPattern" in2="SourceGraphic" result="blend1" />
+              <feBlend mode="overlay" in="grainPattern" in2="blend1" />
+            </filter>
+          </defs>
+
+          {/* Grupo de Listras com Textura e Espessura 60px animadas do topo até a esquerda */}
+          <g filter="url(#retroStripeGrainFooter)">
+            {/* Listra 1 (Mais interna / Superior na curva): Terracota #C66736 */}
+            <path
+              ref={stripe1Ref}
+              d="M 1540.0 -50 L 1540.0 600.0 A 180 180 0 0 1 1360.0 780.0 L -300.0 780.0"
+              stroke="#C66736"
+              strokeWidth="60"
+              strokeLinecap="butt"
+              strokeLinejoin="round"
+            />
+
+            {/* Listra 2 (Meio): Laranja Mostarda #D58334 */}
+            <path
+              ref={stripe2Ref}
+              d="M 1608.0 -50 L 1608.0 600.0 A 248 248 0 0 1 1360.0 848.0 L -300.0 848.0"
+              stroke="#D58334"
+              strokeWidth="60"
+              strokeLinecap="butt"
+              strokeLinejoin="round"
+            />
+
+            {/* Listra 3 (Mais externa / Inferior na curva): Verde Oliva #85713E */}
+            <path
+              ref={stripe3Ref}
+              d="M 1676.0 -50 L 1676.0 600.0 A 316 316 0 0 1 1360.0 916.0 L -300.0 916.0"
+              stroke="#85713E"
+              strokeWidth="60"
+              strokeLinecap="butt"
+              strokeLinejoin="round"
+            />
+          </g>
+        </svg>
+
+        {/* Versão Mobile / Tablet Retrato (ancorada à base inferior para permitir footer compacto sem espaço vazio) */}
+        <svg
+          className="footer-stripes-svg footer-stripes-mobile"
+          viewBox="0 0 390 844"
+          preserveAspectRatio="xMaxYMax slice"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g filter="url(#retroStripeGrainFooter)">
+            {/* Listra 1 (Mais interna / Superior na curva): Terracota #C66736 */}
+            <path
+              ref={stripe1MobRef}
+              d="M 303 180 L 303 712 A 44 44 0 0 1 259 756 L -500 756"
+              stroke="#C66736"
+              strokeWidth="26"
+              strokeLinecap="butt"
+              strokeLinejoin="round"
+            />
+
+            {/* Listra 2 (Meio): Laranja Mostarda #D58334 */}
+            <path
+              ref={stripe2MobRef}
+              d="M 333 180 L 333 712 A 74 74 0 0 1 259 786 L -500 786"
+              stroke="#D58334"
+              strokeWidth="26"
+              strokeLinecap="butt"
+              strokeLinejoin="round"
+            />
+
+            {/* Listra 3 (Mais externa / Inferior na curva): Verde Oliva #85713E */}
+            <path
+              ref={stripe3MobRef}
+              d="M 363 180 L 363 712 A 104 104 0 0 1 259 816 L -500 816"
+              stroke="#85713E"
+              strokeWidth="26"
+              strokeLinecap="butt"
+              strokeLinejoin="round"
+            />
+          </g>
+        </svg>
       </div>
 
-      {/* 2. Lower Sheet: Cream Card Sheet Container */}
-      <div className="footer-sheet-container">
-        <motion.div 
-          className="footer-sheet-card"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.95, ease: EASING, delay: 0.1 }}
-        >
-          {/* Top Row: Left Brand Info & Right Navigation Columns */}
-          <div className="footer-sheet-top">
-            
-            {/* Left Brand Column (Replaces email form as requested) */}
-            <div className="footer-brand-col">
-              <div className="footer-brand-header">
-                <HotCoffeeCupIcon size={30} className="footer-brand-icon" />
-                <span className="footer-brand-title">Aurora Café</span>
-              </div>
-              <p className="footer-brand-desc">
-                Microlotes selecionados acima de 88 pontos, torra artesanal diária e confeitaria autoral servida em um espaço concebido para pausar o tempo.
-              </p>
-              <div className="footer-brand-action">
-                <a href="#menu" className="footer-menu-link">
-                  <span className="btn-text-roll">
-                    <span className="btn-text-primary">
-                      <span>Explorar Cardápio</span>
-                      <ArrowUpRight size={16} />
-                    </span>
-                    <span className="btn-text-secondary" aria-hidden="true">
-                      <span>Explorar Cardápio</span>
-                      <ArrowUpRight size={16} />
-                    </span>
-                  </span>
+      {/* 4. Conteúdo do Footer (Full Screen 100vh com logo gigante Nosta. bem próximo da linha) */}
+      <div className="footer-inner-content">
+        {/* Topo do Footer: 4 Colunas compactas e integradas */}
+        <div className="footer-top-grid">
+          {/* Coluna 1: NAVEGAÇÃO */}
+          <div className="footer-col">
+            <span className="footer-col-header">NAVEGAÇÃO</span>
+            <ul className="footer-col-list">
+              <li><a href="#features">PRODUTO</a></li>
+              <li><a href="#about">SOBRE NÓS</a></li>
+              <li><a href="#stories">HISTÓRIAS</a></li>
+              <li><a href="#cta">PEDIDOS</a></li>
+              <li><a href="#hero">FOTOGRAFIA PURA</a></li>
+            </ul>
+          </div>
+
+          {/* Coluna 2: LEGAIS */}
+          <div className="footer-col">
+            <span className="footer-col-header">LEGAIS</span>
+            <ul className="footer-col-list">
+              <li><a href="#terms">TERMOS DE SERVIÇO</a></li>
+              <li><a href="#privacy">POLÍTICA DE PRIVACIDADE</a></li>
+              <li><a href="#refund">POLÍTICA DE REEMBOLSO</a></li>
+              <li><a href="#cookies">COOKIES</a></li>
+              <li><a href="#manage-cookies">GERENCIAR COOKIES</a></li>
+            </ul>
+          </div>
+
+          {/* Coluna 3: CONTATO */}
+          <div className="footer-col footer-col-contato">
+            <span className="footer-col-header">CONTATO</span>
+            <ul className="footer-col-list">
+              <li>
+                <a href="mailto:CONTATO@NOSTA.COM" className="footer-contact-link">
+                  CONTATO@NOSTA.COM
                 </a>
-              </div>
-            </div>
-
-            {/* Right Nav Grid (4 Columns matching reference) */}
-            <div className="footer-nav-grid">
-              {/* Column 1: Cardápio */}
-              <div className="footer-nav-col">
-                <h3 className="footer-nav-heading">Cardápio</h3>
-                <ul className="footer-nav-list">
-                  <li><a href="#menu">Cafés Especiais</a></li>
-                  <li><a href="#menu">Pâtisserie Artesanal</a></li>
-                  <li><a href="#menu">Cold Brews & Tonics</a></li>
-                  <li><a href="#menu">Salgados & Toasts</a></li>
-                </ul>
-              </div>
-
-              {/* Column 2: Experiência */}
-              <div className="footer-nav-col">
-                <h3 className="footer-nav-heading">Experiência</h3>
-                <ul className="footer-nav-list">
-                  <li><a href="#about">A Nossa História</a></li>
-                  <li><a href="#why-visit">Ritual de Torra</a></li>
-                  <li><a href="#gallery">Galeria Sensorial</a></li>
-                  <li><a href="#about">Microlotes Selecionados</a></li>
-                </ul>
-              </div>
-
-              {/* Column 3: Visite */}
-              <div className="footer-nav-col">
-                <h3 className="footer-nav-heading">Visite</h3>
-                <ul className="footer-nav-list">
-                  <li><a href="#location">Rua das Flores, 128</a></li>
-                  <li><span className="footer-static-info">Seg – Sex: 08h – 20h</span></li>
-                  <li><span className="footer-static-info">Sáb – Dom: 09h – 18h</span></li>
-                  <li><a href="#location">Como Chegar</a></li>
-                </ul>
-              </div>
-
-              {/* Column 4: Conecte */}
-              <div className="footer-nav-col">
-                <h3 className="footer-nav-heading">Conecte</h3>
-                <ul className="footer-nav-list">
-                  <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                  <li><a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">TikTok</a></li>
-                  <li><a href="https://spotify.com" target="_blank" rel="noopener noreferrer">Playlist Aurora</a></li>
-                  <li><a href="https://wa.me/" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
-                </ul>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
 
-          {/* Giant Wordmark: Aurora aligned to the right */}
-          <div className="footer-wordmark-wrap">
-            <svg 
-              className="footer-wordmark-svg" 
-              viewBox="0 0 940 200" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-              aria-label="Aurora"
-            >
-              <text
-                x="940"
-                y="175"
-                textAnchor="end"
-                fill="#3E1E09"
-                fontFamily="'Playfair Display', Georgia, serif"
-                fontSize="240"
-                fontWeight="600"
-                letterSpacing="-0.03em"
-              >
-                Aurora
-              </text>
-            </svg>
+          {/* Coluna 4: COPYRIGHT & CRÉDITOS */}
+          <div className="footer-col footer-col-copyright">
+            <p className="footer-meta-line">2024 © Nosta. Todos os direitos reservados.</p>
+            <p className="footer-meta-line">Um produto de Fotografia Pura.</p>
+            <p className="footer-meta-design">Design by waka.</p>
           </div>
+        </div>
 
-          {/* Bottom Bar: Copyright & Legal */}
-          <div className="footer-bottom-bar">
-            <div className="footer-copyright">
-              © {new Date().getFullYear()} Aurora Café. Todos os direitos reservados.
-            </div>
-
-            <div className="footer-legal-links">
-              <a href="#privacy">Privacidade</a>
-              <span className="footer-dot-sep">•</span>
-              <a href="#terms">Termos</a>
-              <span className="footer-dot-sep">•</span>
-              <button onClick={scrollToTop} className="footer-back-to-top" aria-label="Voltar ao topo">
-                <span>Voltar ao topo</span>
-                <ArrowUp size={14} />
-              </button>
-            </div>
+        {/* Base do Footer: Logotipo Gigante Nosta. Aumentado e Bem Próximo da Linha */}
+        <div className="footer-bottom-stage">
+          <div className="footer-giant-logo-container">
+            <h2 className="footer-giant-logo">
+              Nosta<span className="footer-terracotta-dot" />
+            </h2>
           </div>
-
-        </motion.div>
+        </div>
       </div>
     </footer>
   )

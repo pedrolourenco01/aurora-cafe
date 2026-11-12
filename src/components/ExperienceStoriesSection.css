@@ -1,0 +1,296 @@
+/* ==========================================================================
+   NOSTA — Experience Stories Section (100% da Largura da Section)
+   - Header Bar com divisão pontilhada em 100% da tela
+   - 3 Colunas: Texto na Esquerda (4 linhas exatas) | Câmera no Meio (Sticky) | Imagem na Direita
+   - Efeito "Acendida" ao passar pelo centro da tela
+   - 4 Relatos com termos destacados em âmbar
+   ========================================================================== */
+
+:root {
+  --stories-gutter: clamp(24px, 4.5vw, 84px);
+}
+
+.experience-stories-section {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent !important;
+  color: #F5ECE1;
+  box-sizing: border-box;
+  z-index: 20; /* Texto e imagens na camada superior para interagir com a câmera z-index 10 */
+  overflow: visible;
+  border: none !important;
+}
+
+/* 1. Header Bar Superior com Divisor Pontilhado no Limite do Card */
+.stories-header-strip {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 16px var(--stories-gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 236, 225, 0.6);
+  border: none;
+  user-select: none;
+}
+
+.stories-header-strip::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--stories-gutter);
+  right: var(--stories-gutter);
+  border-bottom: 1px dashed rgba(245, 236, 225, 0.45);
+  pointer-events: none;
+}
+
+.stories-header-left,
+.stories-header-center,
+.stories-header-right {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* 2. Container dos 4 Conteúdos (100% da Largura da Section) */
+.stories-list-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3. Linha de Cada Relato (Espaçamento elegante entre os cards e linha limitada ao card) */
+.story-row {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-height: 54vh;
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr 1.15fr;
+  align-items: center;
+  padding: 46px var(--stories-gutter);
+  box-sizing: border-box;
+  border: none;
+  /* Efeito de Transição da Acendida */
+  opacity: 0.22;
+  filter: grayscale(65%) brightness(0.7);
+  transform: scale(0.98);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, filter, transform;
+}
+
+.story-row::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--stories-gutter);
+  right: var(--stories-gutter);
+  border-bottom: 1px dashed rgba(245, 236, 225, 0.45);
+  pointer-events: none;
+}
+
+/* Remove a linha de separação do último item para não criar borda com a seção do vídeo */
+.story-row:last-child::after {
+  display: none !important;
+  border-bottom: none !important;
+}
+
+
+
+/* Estado Ativo: O Conteúdo que Chega no Meio "Dá uma Acendida" */
+.story-row.is-active {
+  opacity: 1;
+  filter: grayscale(0%) brightness(1);
+  transform: scale(1);
+}
+
+/* --- Coluna da Esquerda: Citação e Autor --- */
+.story-col-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  padding-right: clamp(16px, 2.5vw, 40px);
+  box-sizing: border-box;
+  z-index: 25;
+}
+
+.story-quote {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(1.05rem, 1.45vw, 1.62rem);
+  font-weight: 600;
+  line-height: 1.44;
+  letter-spacing: -0.018em;
+  color: #F7EFE4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Garante exatamente 4 linhas no desktop */
+.story-quote-line {
+  display: block;
+  white-space: nowrap;
+}
+
+.story-highlight {
+  color: #E27D40; /* Termo em destaque aceso em âmbar como na referência Oryzo */
+  font-weight: 700;
+  display: inline;
+}
+
+.story-author-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.story-author-name {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #F5ECE1;
+}
+
+.story-author-role {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245, 236, 225, 0.48);
+}
+
+/* --- Coluna Central: Espaçador da Câmera 3D --- */
+.story-col-center {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  pointer-events: none;
+}
+
+/* --- Coluna da Direita: Imagem da Experiência --- */
+.story-col-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  padding-left: clamp(16px, 2.5vw, 40px);
+  z-index: 25;
+}
+
+.story-image-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 16 / 10.5;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: none !important;
+  border: 1px solid rgba(245, 236, 225, 0.09);
+  background-color: #21150C;
+}
+
+.story-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-row.is-active .story-img:hover {
+  transform: scale(1.035);
+}
+
+.story-img-glow {
+  display: none;
+}
+
+
+/* ==========================================================================
+   Responsividade (Tablets e Smartphones)
+   ========================================================================== */
+@media (max-width: 1024px), (max-width: 1180px) and (orientation: portrait) {
+  :root {
+    --stories-gutter: 32px;
+  }
+
+  .story-row {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 56px var(--stories-gutter);
+    min-height: auto;
+  }
+
+  .story-quote {
+    font-size: clamp(1.18rem, 2.25vw, 1.52rem);
+    line-height: 1.42;
+  }
+
+  .story-quote-line {
+    white-space: normal;
+  }
+
+  .story-col-center {
+    display: none;
+  }
+
+  .story-col-left,
+  .story-col-right {
+    width: 100%;
+    max-width: min(92vw, 820px);
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .story-col-right {
+    justify-content: center;
+  }
+
+  .story-image-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .stories-header-strip {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --stories-gutter: 16px;
+  }
+
+  .stories-header-center {
+    display: none;
+  }
+
+  .story-quote {
+    font-size: 1.15rem;
+    line-height: 1.4;
+  }
+
+  .story-row {
+    padding: 48px var(--stories-gutter);
+    gap: 24px;
+  }
+}

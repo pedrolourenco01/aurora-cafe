@@ -1,0 +1,588 @@
+/* ==========================================================================
+   NOSTA — CTA Section (Textos de Fechamento com Câmera 3D no Centro)
+   - Background creme sólido idêntico à Hero (#F2E4CC + Iluminação de Estúdio + Grão 4.5%)
+   - Câmera 3D centralizada repousando majestosamente entre os blocos de texto
+   - Cores da marca idênticas à Hero:
+     * Fundo da Section e Backdrop: #F2E4CC
+     * Título "Nosta 35mm" e Preço: #432817 (marrom café escuro da Hero)
+     * Ponto e destaques: #C2640C (laranja queimado da Hero)
+     * Eyebrow e Labels: #62602D (verde oliva da Hero)
+     * Descrições e subtextos: #4A3020
+     * Botão "Comprar agora": #382418 com borda #BFA17A e hover #C2640C
+   ========================================================================== */
+
+.nosta-cta-scroll-section {
+  position: relative;
+  width: 100%;
+  height: 160vh; /* Permite a descida suave da câmera e parada estável no centro */
+  background-color: #F2E4CC !important;
+  color: #4A3020;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  outline: none !important;
+  z-index: 5;
+}
+
+/* ==========================================================================
+   1. PALCO FIXO DE FUNDO ESTÚDIO CREME (Z-INDEX 1 - ATRÁS DA CÂMERA Z-INDEX 10)
+   - Reprodução 100% idêntica da iluminação e grão da Hero Section
+   ========================================================================== */
+
+.cta-flow-sticky-backdrop {
+  position: sticky;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh + 4px);
+  margin-bottom: calc(-100vh - 4px);
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  background-color: #F2E4CC;
+  border: none !important;
+  outline: none !important;
+}
+
+.cta-hero-lighting {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 75% 70% at 50% 50%, rgba(255, 243, 222, 0.6) 0%, rgba(242, 228, 204, 0.9) 65%, #F2E4CC 100%);
+}
+
+.cta-hero-grain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.045; /* 4.5% de textura analógica vintage idêntica à Hero */
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grainFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Linhas sutis de grid arquitetural editorial (idênticas à Hero) */
+.cta-grid-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cta-grid-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(67, 40, 23, 0.12);
+  pointer-events: none;
+}
+
+.cta-grid-line-1 {
+  left: 33.333%;
+}
+
+.cta-grid-line-2 {
+  left: 66.666%;
+}
+
+/* ==========================================================================
+   2. PALCO STICKY DOS TEXTOS (Z-INDEX 20 - NA FRENTE DA CÂMERA Z-INDEX 10)
+   ========================================================================== */
+
+.cta-sticky-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cta-final-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(20px, 3vh, 48px) clamp(28px, 4.5vw, 96px);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.cta-overlay-inner {
+  position: relative;
+  width: 100%;
+  max-width: 1720px;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* --- Espaçador central para a Câmera 3D respirar no centro --- */
+.cta-center-spacer {
+  flex: 1 1 480px;
+  min-width: clamp(280px, 32vw, 560px);
+  height: 100%;
+  pointer-events: none;
+}
+
+/* --- Lado Esquerdo: Título e Descrição --- */
+.cta-left-content {
+  display: flex;
+  flex-direction: column;
+  max-width: clamp(320px, 28vw, 460px);
+  z-index: 22;
+  pointer-events: auto;
+  flex-shrink: 0;
+}
+
+.cta-eyebrow-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.cta-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #C2640C;
+  flex-shrink: 0;
+}
+
+.cta-eyebrow-text {
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  font-size: clamp(11px, 0.8vw, 12px);
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #62602D;
+  line-height: 1;
+}
+
+.cta-title {
+  font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(2.8rem, 4.2vw, 5.0rem);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: #432817;
+  margin: 0 0 20px;
+  white-space: nowrap;
+}
+
+.cta-title-dot {
+  color: #C2640C;
+  display: inline;
+}
+
+.cta-description {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(15px, 1.15vw, 18.5px);
+  line-height: 1.6;
+  color: #4A3020;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* --- Lado Direito: Preço, Botão e Diferenciais --- */
+.cta-right-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(28px, 4vh, 48px);
+  max-width: clamp(280px, 24vw, 380px);
+  margin-left: auto;
+  z-index: 22;
+  pointer-events: auto;
+  flex-shrink: 0;
+}
+
+/* Bloco de Preço & Compra */
+.cta-price-action-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.cta-price-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(11px, 0.8vw, 12.5px);
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #62602D;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.cta-price-row {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 18px;
+}
+
+/* Seletor de cores da câmera 3D */
+.cta-color-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 20px;
+  pointer-events: auto;
+}
+
+.cta-color-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cta-color-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(10.5px, 0.78vw, 11.5px);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #62602D;
+}
+
+.cta-color-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(12.5px, 0.9vw, 14px);
+  font-weight: 700;
+  color: #432817;
+}
+
+.cta-color-swatches {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.cta-color-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 3px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(67, 40, 23, 0.28);
+  background: #F2E4CC;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  transition: transform 0.22s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.cta-color-btn:hover {
+  transform: scale(1.08);
+  border-color: rgba(67, 40, 23, 0.65);
+}
+
+.cta-color-btn.is-selected {
+  border: 2px solid #432817;
+  transform: scale(1.08);
+  box-shadow: 0 3px 10px rgba(67, 40, 23, 0.16);
+}
+
+.cta-color-btn:focus-visible {
+  outline: 2px solid #C2640C;
+  outline-offset: 2px;
+}
+
+.cta-color-swatch-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.35), inset 0 -1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.cta-price-value {
+  font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(2.8rem, 4.0vw, 4.2rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  color: #432817;
+}
+
+.cta-price-prefix {
+  font-size: 0.82em;
+  margin-right: 5px;
+}
+
+.cta-price-cents {
+  font-size: 0.58em;
+  font-weight: 850;
+  vertical-align: super;
+  line-height: 0;
+  margin-left: 2px;
+}
+
+.cta-buy-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background-color: #382418;
+  color: #F2E4CC;
+  border: 1px solid #BFA17A;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 15px 32px;
+  border-radius: 22px;
+  text-decoration: none;
+  box-shadow: none !important; /* Sem sombra */
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  width: 100%;
+  max-width: 270px;
+  box-sizing: border-box;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  user-select: none;
+}
+
+.cta-buy-btn:hover {
+  background-color: #C2640C !important; /* Laranja Terracota vibrante da marca */
+  border-color: #C2640C !important;
+  color: #FFFFFF !important;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: none !important;
+}
+
+.cta-buy-btn:active {
+  transform: translateY(0) scale(0.97);
+  background-color: #A35208 !important;
+  box-shadow: none !important;
+}
+
+.cta-buy-btn svg {
+  transition: transform 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.cta-buy-btn:hover svg {
+  transform: translateX(7px);
+}
+
+/* Lista de Diferenciais */
+.cta-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.cta-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.cta-feature-icon {
+  color: #432817;
+  flex-shrink: 0;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-feature-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.cta-feature-title {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(12px, 0.95vw, 14px);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #432817;
+  margin: 0 0 4px;
+}
+
+.cta-feature-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(13.5px, 1.0vw, 15.5px);
+  line-height: 1.48;
+  color: #4A3020;
+  opacity: 0.85;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Responsividade
+   ========================================================================== */
+@media (max-width: 1024px), (max-width: 1180px) and (orientation: portrait) {
+  .cta-final-overlay {
+    padding: 32px 24px;
+  }
+
+  .cta-overlay-inner {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 0;
+  }
+
+  .cta-center-spacer {
+    display: none;
+  }
+
+  .cta-left-content {
+    max-width: 100%;
+  }
+
+  .cta-right-content {
+    max-width: 100%;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+  }
+
+  .cta-features-list {
+    display: none;
+  }
+
+  .cta-grid-lines {
+    display: none;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px), (min-width: 641px) and (max-width: 1180px) and (orientation: portrait) {
+  .cta-final-overlay {
+    padding: 44px 36px;
+  }
+
+  .cta-overlay-inner {
+    align-items: center;
+    text-align: center;
+    padding: 12px 0;
+  }
+
+  .cta-left-content {
+    align-items: center;
+    text-align: center;
+    max-width: 620px;
+  }
+
+  .cta-eyebrow-wrapper {
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .cta-eyebrow-text {
+    font-size: 14px;
+    letter-spacing: 1.6px;
+  }
+
+  .cta-title {
+    font-size: clamp(3.6rem, 7.8vw, 4.6rem);
+    margin-bottom: 16px;
+  }
+
+  .cta-description {
+    font-size: 20px;
+    line-height: 1.55;
+    max-width: 560px;
+  }
+
+  .cta-right-content {
+    width: 100%;
+    margin-left: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cta-price-action-box {
+    align-items: center;
+    text-align: center;
+  }
+
+  .cta-color-selector {
+    align-items: center;
+    margin-bottom: 22px;
+  }
+
+  .cta-color-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .cta-price-label {
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+
+  .cta-price-row {
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .cta-price-value {
+    font-size: clamp(3.6rem, 7.6vw, 4.6rem);
+  }
+
+  .cta-buy-btn {
+    font-size: 18px;
+    padding: 18px 40px;
+    max-width: 320px;
+    border-radius: 26px;
+  }
+}
+
+@media (max-width: 640px) {
+  .cta-right-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cta-buy-btn {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .cta-buy-btn:hover {
+    background-color: #382418 !important;
+    border-color: #BFA17A !important;
+    color: #F2E4CC !important;
+    transform: none !important;
+  }
+
+  .cta-buy-btn:hover svg {
+    transform: none !important;
+  }
+}

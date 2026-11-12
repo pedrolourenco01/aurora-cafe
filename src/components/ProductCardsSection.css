@@ -1,0 +1,368 @@
+/* ==========================================================================
+   NOSTA — Product Cards Section (Seção Separada para os Cards Monumentais)
+   - Cards Monumentais ocupando quase a section toda (height: clamp(560px, 80vh, 760px))
+   - Sem hover (sem escala ou elevação)
+   - Sem transparência (100% sólidos, cores e fotografias de alto impacto)
+   - Câmera desce e para no centro atrás dos cards (z-index: 2)
+   - Cards passam na frente da câmera (z-index: 10) com 1.5rem de espaçamento
+   ========================================================================== */
+
+.product-cards-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 380vh; /* Altura calibrada para rolagem ágil, fluida e sem arrasto excessivo */
+  background-color: transparent !important;
+  color: #F5ECE1;
+  box-sizing: border-box;
+  z-index: 20; /* Garante que os cards fiquem por cima do sticky da câmera (z-index: 10) */
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.product-cards-gallery-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* 1. STICKY FRAME DA VIEWPORT (Mantém o palco fixo na tela durante o scroll) */
+.product-cards-sticky-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+/* Iluminação de Estúdio Marrom Quente */
+.product-cards-lighting-glow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 65% 58% at 50% 50%, rgba(204, 128, 62, 0.32) 0%, rgba(78, 42, 22, 0.5) 45%, rgba(23, 14, 8, 0.95) 80%, #170E08 100%),
+    radial-gradient(circle at 50% 20%, rgba(255, 190, 130, 0.16) 0%, transparent 50%);
+}
+
+.product-cards-grain-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.05;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='cardsGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23cardsGrain)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* ==========================================================================
+   2. TRACK HORIZONTAL DOS CARDS (Z-INDEX 20 - NA FRENTE DA CÂMERA Z-INDEX 15)
+   ========================================================================== */
+.product-cards-track-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+
+.product-cards-track {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Espaço entre cards de 1.5rem */
+  padding: 0 4vw;
+  box-sizing: border-box;
+  pointer-events: auto;
+  will-change: transform;
+}
+
+/* ESTILO BASE DE TODOS OS CARDS (OCUPAM QUASE A SECTION TODA) */
+.product-card {
+  height: clamp(560px, 80vh, 760px); /* Altura monumental como na referência Oryzo */
+  border-radius: 20px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  opacity: 1 !important; /* Sem transparência */
+  box-shadow: none !important; /* SEM SOMBRAS */
+  transform: none !important; /* SEM HOVER */
+  transition: none !important; /* SEM TRANSIÇÃO DE HOVER */
+  user-select: none;
+}
+
+.product-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ==========================================================================
+   CARDS GRANDES COM TEXTO & FOTO INTEGRADA (BEM MAIORES)
+   ========================================================================== */
+.feature-card-large {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Cores de Fundo Base Neutras & Larguras */
+.card-theme-amber {
+  width: clamp(720px, 68vw, 980px);
+  background-color: #170E08;
+}
+
+.card-theme-sand {
+  width: clamp(740px, 70vw, 1020px);
+  background-color: #170E08;
+}
+
+.card-theme-cork {
+  width: clamp(720px, 68vw, 980px);
+  background-color: #170E08;
+}
+
+.card-theme-espresso {
+  width: clamp(780px, 72vw, 1060px);
+  background-color: #170E08;
+}
+
+.card-theme-cognac {
+  width: clamp(740px, 70vw, 1020px);
+  background-color: #170E08;
+}
+
+/* Topo do Card */
+.card-top-content {
+  position: relative;
+  z-index: 3;
+  padding: clamp(28px, 3.4vw, 48px);
+  box-sizing: border-box;
+}
+
+.card-eyebrow-tag {
+  font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin-bottom: 14px;
+  display: inline-block;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9), 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.card-headline-text {
+  font-family: 'Inter', 'Outfit', -apple-system, sans-serif;
+  font-size: clamp(2.3rem, 3.6vw, 4.4rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: #FFFFFF;
+  margin: 0 0 16px 0;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.95);
+}
+
+.headline-line {
+  display: block;
+}
+
+.card-description-text {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(13px, 1.0vw, 15px);
+  font-weight: 500;
+  line-height: 1.55;
+  color: #FFFFFF;
+  max-width: 480px;
+  margin: 0;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9), 0 2px 14px rgba(0, 0, 0, 0.75);
+}
+
+/* Fotografia Integrada Ocupando 100% do Card - Sem Nenhum Fade */
+.card-embedded-photo-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.card-embedded-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.card-embedded-gradient {
+  display: none !important;
+}
+
+/* Rodapé dos Cards Grandes (Tags Estilo ON-DEVICE. do Oryzo) */
+.card-specs-row {
+  position: relative;
+  z-index: 3;
+  padding: clamp(20px, 2.5vw, 36px) clamp(28px, 3.4vw, 48px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.spec-tag-badge {
+  font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+.spec-tag-sub {
+  font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ==========================================================================
+   CARDS DE IMAGEM VERTICAL (MENOR NA LARGURA, MESMA ALTURA MONUMENTAL)
+   ========================================================================== */
+.feature-card-small {
+  border: none;
+  background-color: #23150D;
+}
+
+.card-format-img-lens {
+  width: clamp(340px, 32vw, 460px);
+}
+
+.card-format-img-form {
+  width: clamp(320px, 30vw, 430px);
+}
+
+.card-format-img-materials {
+  width: clamp(340px, 32vw, 460px);
+}
+
+.card-format-img-features {
+  width: clamp(330px, 31vw, 440px);
+}
+
+.card-format-img-shutter {
+  width: clamp(340px, 32vw, 460px);
+}
+
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.card-full-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: none !important; /* SEM HOVER */
+}
+
+.card-image-gradient-overlay {
+  display: none !important;
+}
+
+.card-image-badge {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: rgba(23, 14, 8, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+
+/* ==========================================================================
+   RESPONSIVIDADE (Tablets e Mobile)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .product-card {
+    height: 72vh;
+  }
+
+  .card-theme-amber,
+  .card-theme-sand,
+  .card-theme-cork,
+  .card-theme-espresso,
+  .card-theme-cognac {
+    width: 75vw;
+  }
+
+  .card-format-img-lens,
+  .card-format-img-form,
+  .card-format-img-materials,
+  .card-format-img-features,
+  .card-format-img-shutter {
+    width: 38vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    height: 68vh;
+  }
+
+  .card-theme-amber,
+  .card-theme-sand,
+  .card-theme-cork,
+  .card-theme-espresso,
+  .card-theme-cognac {
+    width: 85vw;
+  }
+
+  .card-format-img-lens,
+  .card-format-img-form,
+  .card-format-img-materials,
+  .card-format-img-features,
+  .card-format-img-shutter {
+    width: 50vw;
+  }
+}

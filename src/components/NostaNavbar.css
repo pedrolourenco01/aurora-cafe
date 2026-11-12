@@ -1,0 +1,206 @@
+/* NOSTA Rounded Floating Navbar (Inspired by Vault/Vaulk reference with smooth rounded ends) */
+.nosta-navbar-wrapper {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  pointer-events: auto;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+}
+
+.nosta-navbar-container {
+  width: 100%;
+  height: 60px;
+  background: #141618;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px; /* Pontas totalmente arredondadas */
+  padding: 6px 8px 6px 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.nosta-navbar-container:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: none;
+}
+
+/* 1. Left Brand / Logo */
+.nosta-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #FFFFFF;
+  user-select: none;
+}
+
+.nosta-nav-logo-text {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.nosta-nav-logo-dot {
+  color: #FF5C28; /* Accent orange dot matching reference */
+}
+
+/* 2. Center Nav Links */
+.nosta-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nosta-nav-link-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.nosta-nav-link-item:hover {
+  color: #FFFFFF;
+}
+
+/* Active link with orange down-right arrow (matching reference) */
+.nosta-nav-link-item.active {
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.nosta-nav-arrow-icon {
+  color: #FF5C28; /* Vibrant Orange Arrow */
+  transition: transform 0.2s ease;
+}
+
+.nosta-nav-link-item:hover .nosta-nav-arrow-icon {
+  transform: translate(2px, 2px);
+}
+
+/* 3. Right CTA Button (Light block button with rounded corners and orange square) */
+.nosta-nav-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 48px;
+  padding: 0 24px;
+  background-color: #D6D0C5; /* Light bone/silvery tone matching reference */
+  color: #141618;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 9999px; /* Pontas arredondadas */
+  letter-spacing: -0.01em;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: none;
+  white-space: nowrap;
+}
+
+.nosta-nav-cta-btn:hover {
+  background-color: #E2DDD3;
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+/* Orange Square Accent (Matching the square dot in reference) */
+.nosta-nav-cta-square {
+  width: 6.5px;
+  height: 6.5px;
+  background-color: #FF5C28; /* Orange square */
+  border-radius: 1.5px;
+  flex-shrink: 0;
+}
+
+/* Mobile Menu Pill (Exact match to Screenshot 2) */
+.nosta-nav-menu-pill {
+  display: none;
+  background-color: #26282B;
+  color: #B5B5B5;
+  border: none;
+  border-radius: 9999px;
+  padding: 6px 16px;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  align-items: center;
+  gap: 10px;
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+.nosta-nav-menu-pill:hover {
+  background-color: #32353A;
+  color: #FFFFFF;
+}
+
+.nosta-menu-dots {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  color: #FFFFFF;
+  margin-top: -2px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .nosta-nav-links {
+    gap: 18px;
+  }
+
+  .nosta-nav-link-item {
+    font-size: 13px;
+  }
+
+  .nosta-nav-cta-btn {
+    height: 42px;
+    padding: 0 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nosta-navbar-container {
+    height: 52px;
+    padding: 5px 6px 5px 18px;
+  }
+
+  .nosta-nav-links {
+    display: none; /* Hidden on small mobile */
+  }
+
+  .nosta-nav-menu-pill {
+    display: inline-flex; /* Show exact Menu : pill from Screenshot 2 */
+  }
+
+  .nosta-nav-logo-text {
+    font-size: 18px;
+  }
+
+  .nosta-nav-cta-btn {
+    height: 40px;
+    padding: 0 14px;
+    font-size: 12px;
+  }
+}
