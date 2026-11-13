@@ -295,8 +295,8 @@
   }
 
   .footer-bottom-stage {
-    margin-top: clamp(32px, 5vw, 56px);
-    padding-bottom: calc(25.9vw + 18px);
+    margin-top: clamp(24px, 4vw, 36px);
+    padding-bottom: 90px;
   }
 
   .footer-giant-logo {
@@ -352,8 +352,8 @@
   }
 
   .footer-bottom-stage {
-    margin-top: 28px;
-    padding-bottom: calc(25.9vw + 14px);
+    margin-top: 22px;
+    padding-bottom: 88px;
   }
 
   .footer-giant-logo-container {

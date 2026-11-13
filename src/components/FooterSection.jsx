@@ -173,7 +173,7 @@ export default function FooterSection() {
             {/* Listra 1 (Mais interna / Superior na curva): Terracota #C66736 */}
             <path
               ref={stripe1MobRef}
-              d="M 303 180 L 303 712 A 44 44 0 0 1 259 756 L -500 756"
+              d="M 303 180 L 303 727 A 44 44 0 0 1 259 771 L -500 771"
               stroke="#C66736"
               strokeWidth="26"
               strokeLinecap="butt"
@@ -183,7 +183,7 @@ export default function FooterSection() {
             {/* Listra 2 (Meio): Laranja Mostarda #D58334 */}
             <path
               ref={stripe2MobRef}
-              d="M 333 180 L 333 712 A 74 74 0 0 1 259 786 L -500 786"
+              d="M 333 180 L 333 727 A 74 74 0 0 1 259 801 L -500 801"
               stroke="#D58334"
               strokeWidth="26"
               strokeLinecap="butt"
@@ -193,7 +193,7 @@ export default function FooterSection() {
             {/* Listra 3 (Mais externa / Inferior na curva): Verde Oliva #85713E */}
             <path
               ref={stripe3MobRef}
-              d="M 363 180 L 363 712 A 104 104 0 0 1 259 816 L -500 816"
+              d="M 363 180 L 363 727 A 104 104 0 0 1 259 831 L -500 831"
               stroke="#85713E"
               strokeWidth="26"
               strokeLinecap="butt"

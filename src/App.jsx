@@ -17,15 +17,13 @@ const FooterSection = lazy(() => import('./components/FooterSection'))
 export default function App() {
   const [cameraColor, setCameraColor] = useState(DEFAULT_CAMERA_COLOR)
   const [introFinished, setIntroFinished] = useState(false)
-  const [mountCamera, setMountCamera] = useState(false)
+  const [mountCamera] = useState(true)
   const [mountBelowFold, setMountBelowFold] = useState(false)
 
   useEffect(() => {
     if (!introFinished) return undefined
-    const rafId = requestAnimationFrame(() => setMountCamera(true))
     const belowFoldTimer = setTimeout(() => setMountBelowFold(true), 120)
     return () => {
-      cancelAnimationFrame(rafId)
       clearTimeout(belowFoldTimer)
     }
   }, [introFinished])

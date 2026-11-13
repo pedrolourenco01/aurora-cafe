@@ -1336,24 +1336,6 @@ export default function Camera3DViewer({ className = '', scrollProgress = 0, cam
         cursor: 'default'
       }}
     >
-      {isLoading && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#4A4036',
-            fontSize: '14px',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            opacity: 0.65
-          }}
-        >
-          Carregando Câmera 3D...
-        </div>
-      )}
       {loadError && (
         <div
           style={{

@@ -71,9 +71,15 @@ export default function NostaHero({ isIntroFinished = true }) {
     )
   )
 
+  const lastWidthRef = useRef(typeof window !== 'undefined' ? window.innerWidth : 390)
+  const hasAnimatedHeroRef = useRef(false)
   useEffect(() => {
     const updateStripes = () => {
-      setMobStripes(computeHeroMobileStripes(window.innerWidth, window.innerHeight))
+      const w = window.innerWidth
+      if (Math.abs(w - lastWidthRef.current) > 30) {
+        lastWidthRef.current = w
+        setMobStripes(computeHeroMobileStripes(w, window.innerHeight))
+      }
     }
     window.addEventListener('resize', updateStripes)
     return () => window.removeEventListener('resize', updateStripes)
@@ -201,6 +207,9 @@ export default function NostaHero({ isIntroFinished = true }) {
 
       return
     }
+
+    if (hasAnimatedHeroRef.current) return
+    hasAnimatedHeroRef.current = true
 
     // DISPARO DA ANIMAÇÃO DE ENTRADA QUANDO O LOGO NOSTA CHEGA
     const heroTl = gsap.timeline({ delay: 0.15 })
