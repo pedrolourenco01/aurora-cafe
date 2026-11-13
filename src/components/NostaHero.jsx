@@ -16,12 +16,12 @@ function computeHeroMobileStripes(vw, vh) {
   const x2 = x3 - step
   const x1 = x2 - step
 
-  // Posiciona as listras no espaço limpo entre o título "NOSTA." e o topo da câmera 3D
-  const y1 = Math.round(safeH * 0.28)
-  const y2 = y1 + step
+  // Posição exatamente atrás da câmera 3D (centro da Hero, idêntico ao desktop)
+  const y2 = Math.round(safeH * 0.473)
+  const y1 = y2 - step
   const y3 = y2 + step
 
-  const r1 = Math.round(strokeWidth * 1.5)
+  const r1 = Math.round(strokeWidth * 1.62)
   const r2 = r1 + step
   const r3 = r2 + step
 
@@ -160,13 +160,15 @@ export default function NostaHero({ isIntroFinished = true }) {
       stripe1MobRef.current, stripe2MobRef.current, stripe3MobRef.current
     ].filter(Boolean)
 
-    // Mede o comprimento exato dos caminhos para strokeDashoffset com margem segura
+    // Mede o comprimento exato dos caminhos para strokeDashoffset com timing e velocidade naturais idênticos
+    const isMobViewport = typeof window !== 'undefined' && window.innerWidth <= 900
     const pathLengths = stripes.map((path) => {
       let l = 0
       try {
         l = path.getTotalLength() || 0
       } catch (e) { }
-      return Math.max(l, 3000)
+      if (l > 50) return Math.ceil(l) + 30
+      return isMobViewport ? 850 : 1850
     })
 
     if (!isIntroFinished) {

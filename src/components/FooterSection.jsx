@@ -20,12 +20,13 @@ export default function FooterSection() {
     const allStripes = stripeGroups.flat()
     if (!allStripes.length) return
 
+    const isMob = typeof window !== 'undefined' && window.innerWidth <= 900
     const getLen = (path) => {
       try {
-        return Math.max(path.getTotalLength() || 0, 2600)
-      } catch (e) {
-        return 4500
-      }
+        const l = path.getTotalLength() || 0
+        if (l > 50) return Math.ceil(l) + 30
+      } catch (e) { }
+      return isMob ? 1500 : 2600
     }
 
     // Estado inicial: Escondido no topo com strokeDashoffset
@@ -76,7 +77,7 @@ export default function FooterSection() {
           }
         })
       },
-      { threshold: 0.05 }
+      { threshold: 0.01, rootMargin: '120px' }
     )
 
     if (footerRef.current) {
@@ -102,13 +103,10 @@ export default function FooterSection() {
              - Animam começando de cima e percorrendo até a esquerda
       */}
       <div className="footer-stripes-container" aria-hidden="true">
-        {/* Versão Desktop (1792 x 1000) */}
+        {/* Shared SVG Defs para Filtros Vintage do Rodapé */}
         <svg
-          className="footer-stripes-svg footer-stripes-desktop"
-          viewBox="0 0 1792 1000"
-          preserveAspectRatio="none"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+          style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden', pointerEvents: 'none' }}
+          aria-hidden="true"
         >
           <defs>
             <filter id="retroStripeGrainFooter" x="-10%" y="-10%" width="120%" height="120%">
@@ -119,7 +117,16 @@ export default function FooterSection() {
               <feBlend mode="overlay" in="grainPattern" in2="blend1" />
             </filter>
           </defs>
+        </svg>
 
+        {/* Versão Desktop (1792 x 1000) */}
+        <svg
+          className="footer-stripes-svg footer-stripes-desktop"
+          viewBox="0 0 1792 1000"
+          preserveAspectRatio="none"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           {/* Grupo de Listras com Textura e Espessura 60px animadas do topo até a esquerda */}
           <g filter="url(#retroStripeGrainFooter)">
             {/* Listra 1 (Mais interna / Superior na curva): Terracota #C66736 */}
@@ -162,7 +169,7 @@ export default function FooterSection() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <g filter="url(#retroStripeGrainFooter)">
+          <g className="footer-stripes-mobile-group">
             {/* Listra 1 (Mais interna / Superior na curva): Terracota #C66736 */}
             <path
               ref={stripe1MobRef}
