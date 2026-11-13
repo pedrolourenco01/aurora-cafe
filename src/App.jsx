@@ -59,11 +59,9 @@ export default function App() {
     const lenis = new Lenis({
       lerp: 0.065,
       wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
+      touchMultiplier: 1.0,
       smoothWheel: true,
-      syncTouch: true,
-      syncTouchLerp: 0.075,
-      touchInertiaExponent: 1.75,
+      syncTouch: false,
       autoRaf: true,
       anchors: true,
     })

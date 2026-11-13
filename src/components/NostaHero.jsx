@@ -16,11 +16,12 @@ function computeHeroMobileStripes(vw, vh) {
   const x2 = x3 - step
   const x1 = x2 - step
 
-  const y2 = Math.round(safeH * 0.473)
-  const y1 = y2 - step
+  // Posiciona as listras no espaço limpo entre o título "NOSTA." e o topo da câmera 3D
+  const y1 = Math.round(safeH * 0.28)
+  const y2 = y1 + step
   const y3 = y2 + step
 
-  const r1 = Math.round(strokeWidth * 1.62)
+  const r1 = Math.round(strokeWidth * 1.5)
   const r2 = r1 + step
   const r3 = r2 + step
 
@@ -390,13 +391,10 @@ export default function NostaHero({ isIntroFinished = true }) {
         style={{ visibility: isIntroFinished ? 'visible' : 'hidden' }}
         aria-hidden="true"
       >
-        {/* Versão Desktop (1792 x 858) */}
+        {/* Shared SVG Defs para Filtros Vintage */}
         <svg
-          className="nosta-retro-stripes-svg nosta-stripes-desktop"
-          viewBox="0 0 1792 858"
-          preserveAspectRatio="none"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+          style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden', pointerEvents: 'none' }}
+          aria-hidden="true"
         >
           <defs>
             <filter id="retroStripeGrain" x="-10%" y="-10%" width="120%" height="120%">
@@ -407,7 +405,16 @@ export default function NostaHero({ isIntroFinished = true }) {
               <feBlend mode="overlay" in="grainPattern" in2="blend1" />
             </filter>
           </defs>
+        </svg>
 
+        {/* Versão Desktop (1792 x 858) */}
+        <svg
+          className="nosta-retro-stripes-svg nosta-stripes-desktop"
+          viewBox="0 0 1792 858"
+          preserveAspectRatio="none"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           {/* Grupo de Listras animadas de cima até a esquerda */}
           <g filter="url(#retroStripeGrain)">
             {/* Listra 1: Terracota #C66736 */}
@@ -442,7 +449,7 @@ export default function NostaHero({ isIntroFinished = true }) {
           </g>
         </svg>
 
-        {/* Versão Mobile e Tablet Retrato (sem distorção em nenhuma proporção) */}
+        {/* Versão Mobile e Tablet Retrato (sem distorção em nenhuma proporção e ultra fluido) */}
         <svg
           className="nosta-retro-stripes-svg nosta-stripes-mobile"
           viewBox={`0 0 ${mobStripes.vw} ${mobStripes.vh}`}
@@ -450,7 +457,7 @@ export default function NostaHero({ isIntroFinished = true }) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <g filter="url(#retroStripeGrain)">
+          <g className="nosta-stripes-mobile-group">
             {/* Listra 1 (Mais interna / Superior na curva): Terracota #C66736 */}
             <path
               ref={stripe1MobRef}

@@ -589,14 +589,15 @@ export default function Camera3DViewer({ className = '', scrollProgress = 0, cam
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100)
     camera.position.set(0, -0.06, 3.4)
 
-    // High quality WebGL Renderer
+    // High quality WebGL Renderer com otimização adaptativa para mobile
+    const isMobileInit = (typeof window !== 'undefined' && window.innerWidth <= 900)
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
       powerPreference: 'high-performance'
     })
     renderer.setSize(width, height, false)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setPixelRatio(isMobileInit ? Math.min(window.devicePixelRatio, 1.5) : Math.min(window.devicePixelRatio, 2))
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 1.15
@@ -1013,6 +1014,8 @@ export default function Camera3DViewer({ className = '', scrollProgress = 0, cam
       camera.aspect = w / h
       camera.updateProjectionMatrix()
       renderer.setSize(w, h, false)
+      const isMobile = (w <= 900) || (window.innerWidth <= 900)
+      renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1.5) : Math.min(window.devicePixelRatio, 2))
     }
 
     window.addEventListener('resize', handleResize)

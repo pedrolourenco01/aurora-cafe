@@ -638,6 +638,10 @@
     display: none;
   }
 
+  .nosta-hero-smoke {
+    display: none !important;
+  }
+
   .nosta-stripes-desktop {
     display: none !important;
   }
