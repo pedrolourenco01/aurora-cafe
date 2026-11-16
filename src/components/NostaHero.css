@@ -78,6 +78,8 @@
   pointer-events: none;
   z-index: 3;
   overflow: hidden;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .nosta-retro-stripes-svg {
@@ -89,6 +91,7 @@
 
 .nosta-retro-stripes-svg path {
   opacity: 0;
+  will-change: stroke-dashoffset;
 }
 
 .nosta-stripes-desktop {

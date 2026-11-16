@@ -22,7 +22,15 @@ export default function App() {
 
   useEffect(() => {
     if (!introFinished) return undefined
-    const belowFoldTimer = setTimeout(() => setMountBelowFold(true), 120)
+    // Aguarda a entrada cinematográfica da Hero (listras + câmera 3D) completar 100% lisa
+    // antes de montar as seções pesadas abaixo da dobra
+    const belowFoldTimer = setTimeout(() => {
+      if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+        window.requestIdleCallback(() => setMountBelowFold(true), { timeout: 1000 })
+      } else {
+        setMountBelowFold(true)
+      }
+    }, 1800)
     return () => {
       clearTimeout(belowFoldTimer)
     }

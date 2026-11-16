@@ -184,27 +184,26 @@ export default function NostaHero({ isIntroFinished = true }) {
       )
     })
 
-    // PASSO 2: A Câmera 3D entra com zoom cinematográfico e levitação sutil após as listras
-    heroTl.add(() => {
-      const cameraStage = document.querySelector('.unified-camera-sticky-stage')
-      if (cameraStage) {
-        gsap.fromTo(
-          cameraStage,
-          {
-            opacity: 0,
-            scale: 0.85,
-            y: 40
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            duration: 1.3,
-            ease: 'back.out(1.2)'
-          }
-        )
-      }
-    }, '-=0.9')
+    // PASSO 2: A Câmera 3D entra com zoom cinematográfico e levitação sutil integrada à timeline
+    const cameraStage = document.querySelector('.unified-camera-sticky-stage')
+    if (cameraStage) {
+      heroTl.fromTo(
+        cameraStage,
+        {
+          opacity: 0,
+          scale: 0.85,
+          y: 40
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 1.3,
+          ease: 'power3.out'
+        },
+        '-=0.9'
+      )
+    }
 
     // PASSO 3: Linhas de grid sutis revelam
     if (gridLinesRef.current) {
@@ -317,7 +316,7 @@ export default function NostaHero({ isIntroFinished = true }) {
         fetchPriority="high"
         className="nosta-hero-smoke opacity-100"
       />
-      {isIntroFinished ? (
+      {isIntroFinished && (typeof window === 'undefined' || window.innerWidth > 900) ? (
         <video
           autoPlay
           loop
