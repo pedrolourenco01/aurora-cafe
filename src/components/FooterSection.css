@@ -268,6 +268,7 @@
     height: auto;
     min-height: 0;
     border-top: 1px solid rgba(36, 22, 14, 0.10);
+    padding-bottom: 1rem;
   }
 
   .footer-lighting {
@@ -301,7 +302,7 @@
 
   .footer-bottom-stage {
     margin-top: clamp(24px, 4vw, 36px);
-    padding-bottom: 1rem;
+    padding-bottom: 90px;
   }
 
   .footer-giant-logo {
@@ -359,7 +360,7 @@
 
   .footer-bottom-stage {
     margin-top: 22px;
-    padding-bottom: 1rem;
+    padding-bottom: 88px;
   }
 
   .footer-giant-logo-container {
