@@ -76,6 +76,10 @@
   overflow: visible;
 }
 
+.footer-stripes-svg path {
+  opacity: 0;
+}
+
 .footer-stripes-mobile {
   display: none;
 }

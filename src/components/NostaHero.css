@@ -87,6 +87,10 @@
   overflow: visible;
 }
 
+.nosta-retro-stripes-svg path {
+  opacity: 0;
+}
+
 .nosta-stripes-desktop {
   display: block;
 }

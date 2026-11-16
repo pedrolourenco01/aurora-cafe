@@ -62,13 +62,9 @@ export default function FooterSection() {
                   },
                   {
                     strokeDashoffset: 0,
+                    opacity: 1,
                     duration: 1.4,
-                    ease: 'power3.out',
-                    onComplete: () => {
-                      // Garante 100% que a linha vá até o final sem cortes
-                      path.style.strokeDasharray = 'none'
-                      path.style.strokeDashoffset = 'none'
-                    }
+                    ease: 'power3.out'
                   },
                   i === 0 ? 0 : 0.08 * i
                 )
@@ -137,6 +133,7 @@ export default function FooterSection() {
               strokeWidth="60"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
 
             {/* Listra 2 (Meio): Laranja Mostarda #D58334 */}
@@ -147,6 +144,7 @@ export default function FooterSection() {
               strokeWidth="60"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
 
             {/* Listra 3 (Mais externa / Inferior na curva): Verde Oliva #85713E */}
@@ -157,6 +155,7 @@ export default function FooterSection() {
               strokeWidth="60"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
           </g>
         </svg>
@@ -178,6 +177,7 @@ export default function FooterSection() {
               strokeWidth="26"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
 
             {/* Listra 2 (Meio): Laranja Mostarda #D58334 */}
@@ -188,6 +188,7 @@ export default function FooterSection() {
               strokeWidth="26"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
 
             {/* Listra 3 (Mais externa / Inferior na curva): Verde Oliva #85713E */}
@@ -198,6 +199,7 @@ export default function FooterSection() {
               strokeWidth="26"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
           </g>
         </svg>

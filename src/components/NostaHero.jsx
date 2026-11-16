@@ -5,7 +5,6 @@ import './NostaHero.css'
 const EASING = [0.19, 1, 0.22, 1]
 
 export default function NostaHero({ isIntroFinished = true }) {
-  const containerRef = useRef(null)
   const capsuleRef = useRef(null)
   const dotsRef = useRef(null)
   const titleRef = useRef(null)
@@ -77,10 +76,10 @@ export default function NostaHero({ isIntroFinished = true }) {
         }, 0.1)
 
       tlRef.current = tl
-    }, containerRef)
+    }, menuContainerRef)
 
     const handleClickOutside = (e) => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
+      if (menuContainerRef.current && !menuContainerRef.current.contains(e.target)) {
         tlRef.current?.timeScale(1.4).reverse()
       }
     }
@@ -172,12 +171,9 @@ export default function NostaHero({ isIntroFinished = true }) {
         },
         {
           strokeDashoffset: 0,
+          opacity: 1,
           duration: 1.45,
-          ease: 'power3.out',
-          onComplete: () => {
-            path.style.strokeDasharray = 'none'
-            path.style.strokeDashoffset = 'none'
-          }
+          ease: 'power3.out'
         },
         i === 0 ? 0 : 0.08 * i
       )
@@ -344,7 +340,6 @@ export default function NostaHero({ isIntroFinished = true }) {
       {/* Listras Retrô Anos 70 (Terracota #C66736, Mostarda #D58334, Verde Oliva #85713E) */}
       <div
         className="nosta-retro-stripes-container"
-        style={{ visibility: isIntroFinished ? 'visible' : 'hidden' }}
         aria-hidden="true"
       >
         {/* Shared SVG Defs para Filtros Vintage */}
@@ -381,6 +376,7 @@ export default function NostaHero({ isIntroFinished = true }) {
               strokeWidth="60"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
 
             {/* Listra 2: Laranja Mostarda #D58334 */}
@@ -391,6 +387,7 @@ export default function NostaHero({ isIntroFinished = true }) {
               strokeWidth="60"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
 
             {/* Listra 3: Verde Oliva Vintage #85713E */}
@@ -401,6 +398,7 @@ export default function NostaHero({ isIntroFinished = true }) {
               strokeWidth="60"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
           </g>
         </svg>
@@ -422,6 +420,7 @@ export default function NostaHero({ isIntroFinished = true }) {
               strokeWidth="22"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
 
             {/* Listra 2 (Meio): Laranja Mostarda #D58334 */}
@@ -432,6 +431,7 @@ export default function NostaHero({ isIntroFinished = true }) {
               strokeWidth="22"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
 
             {/* Listra 3 (Mais externa / Inferior na curva): Verde Oliva Vintage #85713E */}
@@ -442,6 +442,7 @@ export default function NostaHero({ isIntroFinished = true }) {
               strokeWidth="22"
               strokeLinecap="butt"
               strokeLinejoin="round"
+              style={{ opacity: 0 }}
             />
           </g>
         </svg>
