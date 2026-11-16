@@ -1047,9 +1047,6 @@ export default function Camera3DViewer({ className = '', scrollProgress = 0, cam
       return top
     }
 
-    let ctaStickyStageEl = null
-    let unifiedStageEl = null
-
     const updateOffsets = () => {
       const vh = window.innerHeight || 800
       const aboutEl = document.getElementById('about')
@@ -1058,15 +1055,13 @@ export default function Camera3DViewer({ className = '', scrollProgress = 0, cam
       const storiesEl = document.getElementById('stories')
       const ctaEl = document.getElementById('cta')
       const footerEl = document.getElementById('footer') || document.querySelector('.nosta-footer-wrap')
-      ctaStickyStageEl = document.querySelector('.cta-sticky-stage')
-      unifiedStageEl = document.querySelector('.unified-camera-sticky-stage')
 
       cachedOffsets.aboutTop = getElementDocTop(aboutEl, vh)
       cachedOffsets.menuTop = getElementDocTop(menuEl, vh * 2)
       cachedOffsets.featuresTop = getElementDocTop(featuresEl, vh * 5.1)
       cachedOffsets.storiesTop = getElementDocTop(storiesEl, cachedOffsets.featuresTop + vh * 4.2)
       cachedOffsets.ctaTop = getElementDocTop(ctaEl, cachedOffsets.featuresTop + (featuresEl?.offsetHeight || vh * 6.4))
-      cachedOffsets.ctaHeight = ctaEl?.offsetHeight || (vh * 1.6)
+      cachedOffsets.ctaHeight = ctaEl?.offsetHeight || vh
       cachedOffsets.footerTop = getElementDocTop(footerEl, cachedOffsets.ctaTop + cachedOffsets.ctaHeight)
     }
 
@@ -1211,8 +1206,8 @@ export default function Camera3DViewer({ className = '', scrollProgress = 0, cam
         const storiesPosY = Math.sin(sP * Math.PI * 3.0) * (isMobile ? 0.05 : 0.025) + storiesEnv * Math.sin(elapsedTime * 1.6) * 0.015
 
         // Transição contínua sem quebras rumo ao CTA (começa conforme Story 4 avança e CTA entra)
-        const ctaTransStart = ctaTop - vh * 0.55
-        const ctaTransEnd = ctaTop + vh * 0.35
+        const ctaTransStart = ctaTop - vh * 0.50
+        const ctaTransEnd = ctaTop + vh * 0.10
         const ctaProgress = Math.max(0, Math.min(1, (scroll - ctaTransStart) / Math.max(1, ctaTransEnd - ctaTransStart)))
         // Curva cúbica Hermite (smoothstep): derivada inicial e final são perfeitamente zero
         const easeCTA = ctaProgress * ctaProgress * (3 - 2 * ctaProgress)
@@ -1230,16 +1225,18 @@ export default function Camera3DViewer({ className = '', scrollProgress = 0, cam
         targetScaleMult = isMobile ? mobileScale : 1.03
       }
 
-      // Saída natural do CTA rumo ao Footer:
-      // Sincroniza 1:1 com a posição real da .cta-sticky-stage na tela para a câmera subir
-      // alinhada exatamente entre "Nosta 35mm." e "APENAS R$ 699,00" sem apagar nem ser cortada.
-      const ctaStageTop = ctaStickyStageEl ? ctaStickyStageEl.getBoundingClientRect().top : 0
-      const camStageTop = unifiedStageEl ? unifiedStageEl.getBoundingClientRect().top : 0
-      const ctaExitOffset = scroll >= ctaTop && ctaStageTop < 0 ? ctaStageTop - camStageTop : 0
-      const ctaExitedOffscreen = scroll >= ctaTop && ctaStageTop <= -(vh + 120)
+      // Saída suave e líquida rumo ao Footer governada nativamente pelo CSS Sticky do wrapper:
+      // Conforme o CTA se aproxima do final ou no mobile o usuário rola para o rodapé, a câmera faz um fade-out suave e desliga o WebGL.
+      // Zero getBoundingClientRect(), zero layout thrashing, fluidez pura a 60/120 FPS.
+      const footerStart = cachedOffsets.footerTop || (ctaTop + vh)
+      const fadeStart = isMobile ? ctaTop + 60 : (footerStart - vh * 0.40)
+      const fadeEnd = isMobile ? ctaTop + 240 : footerStart
+      const fadeProgress = Math.max(0, Math.min(1, (scroll - fadeStart) / Math.max(1, fadeEnd - fadeStart)))
+      const exitOpacity = 1 - fadeProgress
+      const ctaExitedOffscreen = scroll >= fadeEnd
 
       const inHeroDrag = scroll < Math.max(80, aboutTop * 0.35)
-      const inCtaDrag = scroll >= ctaTop - vh * 0.45 && !ctaExitedOffscreen
+      const inCtaDrag = scroll >= ctaTop - vh * 0.45 && scroll < fadeStart
       canDragInCurrentSection = inHeroDrag || inCtaDrag
 
       if (!canDragInCurrentSection && isHoveringCamera && !isDragging) {
@@ -1248,9 +1245,13 @@ export default function Camera3DViewer({ className = '', scrollProgress = 0, cam
       }
 
       if (containerRef.current) {
-        containerRef.current.style.transform =
-          ctaExitOffset < -0.5 ? `translate3d(0, ${ctaExitOffset}px, 0)` : 'none'
+        containerRef.current.style.opacity = exitOpacity < 0.99 ? exitOpacity.toFixed(3) : '1'
         containerRef.current.style.visibility = ctaExitedOffscreen ? 'hidden' : 'visible'
+      }
+
+      if (ctaExitedOffscreen) {
+        // Quando o usuário já desceu para o rodapé, suspende a renderização 3D para liberar 100% da GPU
+        return
       }
 
       const hasCustomDrag = userDragQuat.angleTo(IDENTITY_QUAT) > 0.03

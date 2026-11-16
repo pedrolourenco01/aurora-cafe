@@ -14,7 +14,7 @@
 .nosta-cta-scroll-section {
   position: relative;
   width: 100%;
-  height: 160vh; /* Permite a descida suave da câmera e parada estável no centro */
+  min-height: 100vh;
   background-color: #F2E4CC !important;
   color: #4A3020;
   box-sizing: border-box;
@@ -31,12 +31,10 @@
    ========================================================================== */
 
 .cta-flow-sticky-backdrop {
-  position: sticky;
-  top: -2px;
-  left: 0;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: calc(100vh + 4px);
-  margin-bottom: calc(-100vh - 4px);
+  height: 100%;
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
@@ -101,30 +99,28 @@
    ========================================================================== */
 
 .cta-sticky-stage {
-  position: sticky;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  overflow: hidden;
 }
 
 .cta-final-overlay {
-  position: absolute;
-  inset: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: clamp(20px, 3vh, 48px) clamp(28px, 4.5vw, 96px);
   box-sizing: border-box;
   pointer-events: none;
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
 
 .cta-overlay-inner {
@@ -443,15 +439,31 @@
    Responsividade
    ========================================================================== */
 @media (max-width: 1024px), (max-width: 1180px) and (orientation: portrait) {
+  .nosta-cta-scroll-section {
+    min-height: 100svh;
+    height: auto;
+  }
+
+  .cta-sticky-stage {
+    min-height: 100svh;
+  }
+
   .cta-final-overlay {
-    padding: 32px 24px;
+    padding: clamp(24px, 4vh, 36px) 24px;
+    min-height: 100svh;
   }
 
   .cta-overlay-inner {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 20px 0;
+    padding: 16px 0;
+    min-height: calc(100svh - 48px);
+  }
+
+  .cta-hero-grain {
+    mix-blend-mode: normal;
+    opacity: 0.035;
   }
 
   .cta-center-spacer {
