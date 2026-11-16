@@ -1,42 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import './NostaHero.css'
 
 const EASING = [0.19, 1, 0.22, 1]
-
-function computeHeroMobileStripes(vw, vh) {
-  const safeW = Math.max(320, vw || 390)
-  const safeH = Math.max(520, vh || 844)
-  const strokeWidth = Math.round(Math.max(25, Math.min(54, safeW * 0.056)))
-  const gap = Math.max(4, Math.round(strokeWidth * 0.16))
-  const step = strokeWidth + gap
-  const rightPad = Math.max(13, Math.round(safeW * 0.036))
-
-  const x3 = safeW - rightPad - strokeWidth * 0.5
-  const x2 = x3 - step
-  const x1 = x2 - step
-
-  // Posição exatamente atrás da câmera 3D (centro da Hero, idêntico ao desktop)
-  const y2 = Math.round(safeH * 0.473)
-  const y1 = y2 - step
-  const y3 = y2 + step
-
-  const r1 = Math.round(strokeWidth * 1.62)
-  const r2 = r1 + step
-  const r3 = r2 + step
-
-  const turnY = y1 - r1
-  const turnX = x1 - r1
-
-  return {
-    vw: safeW,
-    vh: safeH,
-    strokeWidth,
-    d1: `M ${x1} -40 L ${x1} ${turnY} A ${r1} ${r1} 0 0 1 ${turnX} ${y1} L -40 ${y1}`,
-    d2: `M ${x2} -40 L ${x2} ${turnY} A ${r2} ${r2} 0 0 1 ${turnX} ${y2} L -40 ${y2}`,
-    d3: `M ${x3} -40 L ${x3} ${turnY} A ${r3} ${r3} 0 0 1 ${turnX} ${y3} L -40 ${y3}`,
-  }
-}
 
 export default function NostaHero({ isIntroFinished = true }) {
   const containerRef = useRef(null)
@@ -64,26 +30,7 @@ export default function NostaHero({ isIntroFinished = true }) {
   const scrollIndicatorRef = useRef(null)
   const gridLinesRef = useRef(null)
 
-  const [mobStripes, setMobStripes] = useState(() =>
-    computeHeroMobileStripes(
-      typeof window !== 'undefined' ? window.innerWidth : 390,
-      typeof window !== 'undefined' ? window.innerHeight : 844
-    )
-  )
-
-  const lastWidthRef = useRef(typeof window !== 'undefined' ? window.innerWidth : 390)
   const hasAnimatedHeroRef = useRef(false)
-  useEffect(() => {
-    const updateStripes = () => {
-      const w = window.innerWidth
-      if (Math.abs(w - lastWidthRef.current) > 30) {
-        lastWidthRef.current = w
-        setMobStripes(computeHeroMobileStripes(w, window.innerHeight))
-      }
-    }
-    window.addEventListener('resize', updateStripes)
-    return () => window.removeEventListener('resize', updateStripes)
-  }, [])
 
   // 1. Menu Dropdown Interativo (Hover / Click)
   useEffect(() => {
@@ -161,25 +108,24 @@ export default function NostaHero({ isIntroFinished = true }) {
   // 3. A Câmera surge no centro com entrada cinematográfica
   // 4. Demais conteúdos (Eyebrow, Menu, Texto da Direita, Card, Scroll) surgem fluidamente
   useEffect(() => {
-    const stripes = [
-      stripe1Ref.current, stripe2Ref.current, stripe3Ref.current,
-      stripe1MobRef.current, stripe2MobRef.current, stripe3MobRef.current
-    ].filter(Boolean)
+    const isMob = typeof window !== 'undefined' && window.innerWidth <= 900
+    const activeStripes = (isMob
+      ? [stripe1MobRef.current, stripe2MobRef.current, stripe3MobRef.current]
+      : [stripe1Ref.current, stripe2Ref.current, stripe3Ref.current]
+    ).filter(Boolean)
 
     // Mede o comprimento exato dos caminhos para strokeDashoffset com timing e velocidade naturais idênticos
-    const isMobViewport = typeof window !== 'undefined' && window.innerWidth <= 900
-    const pathLengths = stripes.map((path) => {
+    const pathLengths = activeStripes.map((path) => {
       let l = 0
       try {
         l = path.getTotalLength() || 0
       } catch (e) { }
-      if (l > 50) return Math.ceil(l) + 30
-      return isMobViewport ? 850 : 1850
+      return Math.max(Math.ceil(l), isMob ? 1000 : 2000)
     })
 
     if (!isIntroFinished) {
       // Estado inicial oculto aguardando a finalização da viagem do logo NOSTA
-      stripes.forEach((path, i) => {
+      activeStripes.forEach((path, i) => {
         const len = pathLengths[i]
         gsap.set(path, {
           strokeDasharray: len,
@@ -211,13 +157,12 @@ export default function NostaHero({ isIntroFinished = true }) {
     if (hasAnimatedHeroRef.current) return
     hasAnimatedHeroRef.current = true
 
-    // DISPARO DA ANIMAÇÃO DE ENTRADA QUANDO O LOGO NOSTA CHEGA
+    // DISPARO DA ANIMAÇÃO DE ENTRADA QUANDO O LOGO NOSTA CHEGA (idêntico ao desktop)
     const heroTl = gsap.timeline({ delay: 0.15 })
 
     // PASSO 1: As 3 Listras Retrô entram desenhando do topo percorrendo a curva até a esquerda
-    stripes.forEach((path, i) => {
+    activeStripes.forEach((path, i) => {
       const len = pathLengths[i]
-      const order = i % 3
       heroTl.fromTo(
         path,
         {
@@ -234,7 +179,7 @@ export default function NostaHero({ isIntroFinished = true }) {
             path.style.strokeDashoffset = 'none'
           }
         },
-        order === 0 ? 0 : 0.08 * order
+        i === 0 ? 0 : 0.08 * i
       )
     })
 
@@ -460,10 +405,10 @@ export default function NostaHero({ isIntroFinished = true }) {
           </g>
         </svg>
 
-        {/* Versão Mobile e Tablet Retrato (sem distorção em nenhuma proporção e ultra fluido) */}
+        {/* Versão Mobile e Tablet Retrato (100% Estático, Idêntico ao Desktop, Ultra Fluido) */}
         <svg
           className="nosta-retro-stripes-svg nosta-stripes-mobile"
-          viewBox={`0 0 ${mobStripes.vw} ${mobStripes.vh}`}
+          viewBox="0 0 390 844"
           preserveAspectRatio="none"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -472,9 +417,9 @@ export default function NostaHero({ isIntroFinished = true }) {
             {/* Listra 1 (Mais interna / Superior na curva): Terracota #C66736 */}
             <path
               ref={stripe1MobRef}
-              d={mobStripes.d1}
+              d="M 310 -40 L 310 337 A 36 36 0 0 1 274 373 L -40 373"
               stroke="#C66736"
-              strokeWidth={mobStripes.strokeWidth}
+              strokeWidth="22"
               strokeLinecap="butt"
               strokeLinejoin="round"
             />
@@ -482,9 +427,9 @@ export default function NostaHero({ isIntroFinished = true }) {
             {/* Listra 2 (Meio): Laranja Mostarda #D58334 */}
             <path
               ref={stripe2MobRef}
-              d={mobStripes.d2}
+              d="M 336 -40 L 336 337 A 62 62 0 0 1 274 399 L -40 399"
               stroke="#D58334"
-              strokeWidth={mobStripes.strokeWidth}
+              strokeWidth="22"
               strokeLinecap="butt"
               strokeLinejoin="round"
             />
@@ -492,9 +437,9 @@ export default function NostaHero({ isIntroFinished = true }) {
             {/* Listra 3 (Mais externa / Inferior na curva): Verde Oliva Vintage #85713E */}
             <path
               ref={stripe3MobRef}
-              d={mobStripes.d3}
+              d="M 362 -40 L 362 337 A 88 88 0 0 1 274 425 L -40 425"
               stroke="#85713E"
-              strokeWidth={mobStripes.strokeWidth}
+              strokeWidth="22"
               strokeLinecap="butt"
               strokeLinejoin="round"
             />

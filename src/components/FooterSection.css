@@ -258,7 +258,8 @@
   }
 }
 
-@media (max-width: 900px), (max-width: 1180px) and (orientation: portrait) {
+@media (max-width: 900px),
+(max-width: 1180px) and (orientation: portrait) {
   .nosta-footer-wrap {
     height: auto;
     min-height: 0;
@@ -305,6 +306,7 @@
 }
 
 @media (max-width: 640px) {
+
   .nosta-footer-wrap,
   .footer-inner-content {
     height: auto;
