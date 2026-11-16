@@ -265,10 +265,10 @@
 @media (max-width: 900px),
 (max-width: 1180px) and (orientation: portrait) {
   .nosta-footer-wrap {
-    height: auto;
-    min-height: 0;
+    height: auto !important;
+    min-height: 0 !important;
     border-top: 1px solid rgba(36, 22, 14, 0.10);
-    padding-bottom: 1rem;
+    padding-bottom: 0 !important;
   }
 
   .footer-lighting {
@@ -302,7 +302,7 @@
 
   .footer-bottom-stage {
     margin-top: clamp(24px, 4vw, 36px);
-    padding-bottom: 90px;
+    padding-bottom: 84px;
   }
 
   .footer-giant-logo {
@@ -360,7 +360,7 @@
 
   .footer-bottom-stage {
     margin-top: 22px;
-    padding-bottom: 88px;
+    padding-bottom: 82px;
   }
 
   .footer-giant-logo-container {
