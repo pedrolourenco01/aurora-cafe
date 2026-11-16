@@ -1225,18 +1225,14 @@ export default function Camera3DViewer({ className = '', scrollProgress = 0, cam
         targetScaleMult = isMobile ? mobileScale : 1.03
       }
 
-      // Saída suave e líquida rumo ao Footer governada nativamente pelo CSS Sticky do wrapper:
-      // Conforme o CTA se aproxima do final ou no mobile o usuário rola para o rodapé, a câmera faz um fade-out suave e desliga o WebGL.
-      // Zero getBoundingClientRect(), zero layout thrashing, fluidez pura a 60/120 FPS.
+      // A câmera para definitivamente no CTA e repousa viva, sólida e interativa.
+      // Ela NÃO desce e NÃO some: sobe em sincronia matemática 1:1 com o CTA rumo ao Footer sem layout thrashing.
       const footerStart = cachedOffsets.footerTop || (ctaTop + vh)
-      const fadeStart = isMobile ? ctaTop + 60 : (footerStart - vh * 0.40)
-      const fadeEnd = isMobile ? ctaTop + 240 : footerStart
-      const fadeProgress = Math.max(0, Math.min(1, (scroll - fadeStart) / Math.max(1, fadeEnd - fadeStart)))
-      const exitOpacity = 1 - fadeProgress
-      const ctaExitedOffscreen = scroll >= fadeEnd
+      const ctaExitOffset = scroll >= ctaTop ? scroll - ctaTop : 0
+      const ctaExitedOffscreen = scroll >= footerStart + 60
 
       const inHeroDrag = scroll < Math.max(80, aboutTop * 0.35)
-      const inCtaDrag = scroll >= ctaTop - vh * 0.45 && scroll < fadeStart
+      const inCtaDrag = scroll >= ctaTop - vh * 0.45 && !ctaExitedOffscreen
       canDragInCurrentSection = inHeroDrag || inCtaDrag
 
       if (!canDragInCurrentSection && isHoveringCamera && !isDragging) {
@@ -1245,12 +1241,14 @@ export default function Camera3DViewer({ className = '', scrollProgress = 0, cam
       }
 
       if (containerRef.current) {
-        containerRef.current.style.opacity = exitOpacity < 0.99 ? exitOpacity.toFixed(3) : '1'
+        containerRef.current.style.transform =
+          ctaExitOffset > 0.5 ? `translate3d(0, ${-ctaExitOffset}px, 0)` : 'none'
+        containerRef.current.style.opacity = '1'
         containerRef.current.style.visibility = ctaExitedOffscreen ? 'hidden' : 'visible'
       }
 
       if (ctaExitedOffscreen) {
-        // Quando o usuário já desceu para o rodapé, suspende a renderização 3D para liberar 100% da GPU
+        // Apenas quando já rolou totalmente para o rodapé (fora da tela), desativa render para economizar GPU
         return
       }
 
