@@ -29,12 +29,12 @@ export default function FooterSection() {
       return isMob ? 1500 : 2600
     }
 
-    // Estado inicial: Escondido no topo com strokeDashoffset
+    // Estado inicial: Escondido no topo com strokeDashoffset positivo (100% WebKit/Safari safe)
     allStripes.forEach((path) => {
       const len = getLen(path)
       gsap.set(path, {
-        strokeDasharray: len,
-        strokeDashoffset: -len,
+        strokeDasharray: `${len} ${len}`,
+        strokeDashoffset: len,
         opacity: 0
       })
     })
@@ -56,8 +56,8 @@ export default function FooterSection() {
                 tl.fromTo(
                   path,
                   {
-                    strokeDasharray: len,
-                    strokeDashoffset: -len,
+                    strokeDasharray: `${len} ${len}`,
+                    strokeDashoffset: len,
                     opacity: 1
                   },
                   {

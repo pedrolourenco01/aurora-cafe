@@ -113,22 +113,27 @@ export default function NostaHero({ isIntroFinished = true }) {
       : [stripe1Ref.current, stripe2Ref.current, stripe3Ref.current]
     ).filter(Boolean)
 
-    // Mede o comprimento exato dos caminhos para strokeDashoffset com timing e velocidade naturais idênticos
-    const pathLengths = activeStripes.map((path) => {
+    const allStripes = [
+      stripe1Ref.current, stripe2Ref.current, stripe3Ref.current,
+      stripe1MobRef.current, stripe2MobRef.current, stripe3MobRef.current
+    ].filter(Boolean)
+
+    // Mede o comprimento exato dos caminhos com valores estritamente positivos (100% WebKit/Safari safe)
+    const getLen = (path) => {
       let l = 0
       try {
         l = path.getTotalLength() || 0
       } catch (e) { }
-      return Math.max(Math.ceil(l), isMob ? 1000 : 2000)
-    })
+      return l > 50 ? Math.ceil(l) + 20 : (isMob ? 800 : 1600)
+    }
 
     if (!isIntroFinished) {
       // Estado inicial oculto aguardando a finalização da viagem do logo NOSTA
-      activeStripes.forEach((path, i) => {
-        const len = pathLengths[i]
+      allStripes.forEach((path) => {
+        const len = getLen(path)
         gsap.set(path, {
-          strokeDasharray: len,
-          strokeDashoffset: -len, // Começa escondido no topo
+          strokeDasharray: `${len} ${len}`,
+          strokeDashoffset: len, // Positivo: perfeitamente compatível com Safari iOS e Chrome
           opacity: 0
         })
       })
@@ -161,12 +166,12 @@ export default function NostaHero({ isIntroFinished = true }) {
 
     // PASSO 1: As 3 Listras Retrô entram desenhando do topo percorrendo a curva até a esquerda
     activeStripes.forEach((path, i) => {
-      const len = pathLengths[i]
+      const len = getLen(path)
       heroTl.fromTo(
         path,
         {
-          strokeDasharray: len,
-          strokeDashoffset: -len,
+          strokeDasharray: `${len} ${len}`,
+          strokeDashoffset: len,
           opacity: 1
         },
         {
