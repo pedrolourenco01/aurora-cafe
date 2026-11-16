@@ -62,12 +62,19 @@ export default function App() {
       return undefined
     }
 
+    const isMob = typeof window !== 'undefined' && (
+      window.innerWidth <= 900 ||
+      (window.innerWidth <= 1180 && window.innerHeight > window.innerWidth)
+    )
+
     const lenis = new Lenis({
-      lerp: 0.065,
+      lerp: isMob ? 0.05 : 0.065,
       wheelMultiplier: 1.0,
-      touchMultiplier: 1.0,
+      touchMultiplier: isMob ? 0.55 : 1.0,
       smoothWheel: true,
-      syncTouch: false,
+      syncTouch: isMob,
+      syncTouchLerp: isMob ? 0.06 : 0.075,
+      touchInertiaExponent: isMob ? 1.25 : 1.7,
       autoRaf: true,
       anchors: true,
     })
